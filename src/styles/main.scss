@@ -3,17 +3,8 @@
 // Imported in src/main.tsx
 // ─────────────────────────────────────────────────────────────
 
-// 1. Tailwind CSS base (v4 — CSS-first config)
-@import 'tailwindcss';
 
-// 2. SCSS partials (order matters: vars + mixins first)
-//    Note: _variables and _mixins are auto-injected into every
-//    .module.scss via vite.config.ts additionalData, so we don't
-//    @use them here — we @forward them globally.
-@use 'variables' as *;
-@use 'mixins' as *;
-
-// 3. Global styles
+// 1. Global styles (each partial @use's variables/mixins as needed)
 @use 'reset';
 @use 'typography';
 @use 'animations';

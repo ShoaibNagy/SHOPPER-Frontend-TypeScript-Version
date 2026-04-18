@@ -3,6 +3,9 @@
 // Overrides for Stripe Elements iframe styling
 // ─────────────────────────────────────────────────────────────
 
+@use 'variables' as *;
+@use 'mixins' as *;
+
 .stripe-element-wrapper {
     position: relative;
   

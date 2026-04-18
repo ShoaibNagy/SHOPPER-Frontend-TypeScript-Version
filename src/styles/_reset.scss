@@ -2,6 +2,9 @@
 // _reset.scss
 // ─────────────────────────────────────────────────────────────
 
+@use 'variables' as *;
+@use 'mixins' as *;
+
 *,
 *::before,
 *::after {

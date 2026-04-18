@@ -11,6 +11,9 @@ build/
 # Environment variables — never commit these
 .env
 .env.*
+main.css
+*.css.map
+*.d.ts
 
 # Editor directories
 .vscode/*

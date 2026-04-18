@@ -4,6 +4,8 @@
 // Component-specific animations live in their own .module.scss.
 // ─────────────────────────────────────────────────────────────
 
+@use 'variables' as *;
+
 @keyframes fade-in {
     from { opacity: 0; }
     to   { opacity: 1; }
