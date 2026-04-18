@@ -1,0 +1,68 @@
+// ─────────────────────────────────────────────────────────────
+// Spinner.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.spinner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  
+    &--centered {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  
+  // ── The ring ──────────────────────────────────────────────────
+  .spinner__ring {
+    display: block;
+    border-radius: 50%;
+    border-style: solid;
+    animation: spinner-rotate 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  
+  // ── Sizes ─────────────────────────────────────────────────────
+  .spinner--xs .spinner__ring { width: 14px; height: 14px; border-width: 2px; }
+  .spinner--sm .spinner__ring { width: 20px; height: 20px; border-width: 2px; }
+  .spinner--md .spinner__ring { width: 28px; height: 28px; border-width: 3px; }
+  .spinner--lg .spinner__ring { width: 40px; height: 40px; border-width: 3px; }
+  .spinner--xl .spinner__ring { width: 56px; height: 56px; border-width: 4px; }
+  
+  // ── Colors ────────────────────────────────────────────────────
+  .spinner--brand .spinner__ring {
+    border-color: rgba($brand-500, 0.2);
+    border-top-color: $brand-500;
+  }
+  
+  .spinner--white .spinner__ring {
+    border-color: rgba(255, 255, 255, 0.2);
+    border-top-color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .spinner--muted .spinner__ring {
+    border-color: rgba(255, 255, 255, 0.06);
+    border-top-color: $ink-faint;
+  }
+  
+  // ── Visually hidden label (accessible) ───────────────────────
+  .spinner__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  @keyframes spinner-rotate {
+    to { transform: rotate(360deg); }
+  }
