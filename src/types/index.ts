@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────
 // types/index.ts  —  barrel export
-// Import from '@types' in components instead of deep paths.
+// Import from '@/types' in components instead of deep paths.
 // ─────────────────────────────────────────────────────────────
 
 export type * from './api.types';
