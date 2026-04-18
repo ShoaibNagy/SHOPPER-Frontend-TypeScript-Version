@@ -12,6 +12,7 @@ build/
 .env
 .env.*
 main.css
+*.module.css
 *.css.map
 *.d.ts
 
