@@ -1,0 +1,101 @@
+// ─────────────────────────────────────────────────────────────
+// _typography.scss
+// ─────────────────────────────────────────────────────────────
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: $font-display;
+    line-height: $leading-tight;
+    letter-spacing: -0.025em;
+    color: $ink;
+  }
+  
+  h1 {
+    font-size: clamp($text-4xl, 6vw, $text-7xl);
+    font-weight: $weight-black;
+  }
+  
+  h2 {
+    font-size: clamp($text-3xl, 4vw, $text-5xl);
+    font-weight: $weight-bold;
+  }
+  
+  h3 {
+    font-size: clamp($text-2xl, 3vw, $text-4xl);
+    font-weight: $weight-bold;
+  }
+  
+  h4 {
+    font-size: clamp($text-xl, 2.5vw, $text-3xl);
+    font-weight: $weight-semibold;
+  }
+  
+  h5 {
+    font-size: $text-xl;
+    font-weight: $weight-semibold;
+  }
+  
+  h6 {
+    font-size: $text-lg;
+    font-weight: $weight-medium;
+  }
+  
+  p {
+    font-size: $text-base;
+    line-height: $leading-relaxed;
+    color: $ink-muted;
+  }
+  
+  .lead {
+    font-size: $text-lg;
+    line-height: $leading-relaxed;
+    color: $ink-muted;
+  }
+  
+  strong, b {
+    font-weight: $weight-semibold;
+    color: $ink;
+  }
+  
+  small {
+    font-size: $text-sm;
+  }
+  
+  a {
+    @include transition(color);
+  
+    &:hover {
+      color: $brand-400;
+    }
+  }
+  
+  code {
+    font-family: $font-mono;
+    font-size: 0.875em;
+    background: $surface-3;
+    padding: 0.125em 0.375em;
+    border-radius: $radius-sm;
+    color: $brand-400;
+  }
+  
+  pre {
+    font-family: $font-mono;
+    font-size: $text-sm;
+    background: $surface-2;
+    padding: $space-4;
+    border-radius: $radius-xl;
+    overflow-x: auto;
+    @include scrollbar-brand;
+  }
+  
+  // ── Utility classes ───────────────────────────────────────────
+  .text-display {
+    font-family: $font-display;
+  }
+  
+  .text-gradient-brand {
+    @include text-gradient;
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }

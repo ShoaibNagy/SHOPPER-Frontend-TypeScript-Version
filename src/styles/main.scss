@@ -1,0 +1,23 @@
+// ─────────────────────────────────────────────────────────────
+// main.scss — Global stylesheet entry point
+// Imported in src/main.tsx
+// ─────────────────────────────────────────────────────────────
+
+// 1. Tailwind CSS base (v4 — CSS-first config)
+@import 'tailwindcss';
+
+// 2. SCSS partials (order matters: vars + mixins first)
+//    Note: _variables and _mixins are auto-injected into every
+//    .module.scss via vite.config.ts additionalData, so we don't
+//    @use them here — we @forward them globally.
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// 3. Global styles
+@use 'reset';
+@use 'typography';
+@use 'animations';
+@use 'stripe';
+
+// 4. Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');

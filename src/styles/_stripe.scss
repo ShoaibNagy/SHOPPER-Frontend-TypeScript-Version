@@ -1,0 +1,39 @@
+// ─────────────────────────────────────────────────────────────
+// _stripe.scss
+// Overrides for Stripe Elements iframe styling
+// ─────────────────────────────────────────────────────────────
+
+.stripe-element-wrapper {
+    position: relative;
+  
+    .StripeElement {
+      background: $surface-2;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: $radius-lg;
+      padding: $space-3 $space-4;
+      @include transition(border-color box-shadow);
+  
+      &--focus {
+        border-color: $brand-500;
+        box-shadow: 0 0 0 3px rgba($brand-500, 0.15);
+      }
+  
+      &--invalid {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+      }
+  
+      &--complete {
+        border-color: #22c55e;
+      }
+    }
+  }
+  
+  // Payment element container
+  .payment-element {
+    .p-Input {
+      background: $surface-2 !important;
+      color: $ink !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
