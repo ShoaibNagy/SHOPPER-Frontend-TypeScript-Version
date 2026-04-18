@@ -1,0 +1,178 @@
+// ─────────────────────────────────────────────────────────────
+// Modal.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ── Backdrop ──────────────────────────────────────────────────
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: $z-modal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-4;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    animation: modal-backdrop-in $duration-slow $ease-out-expo both;
+  
+    @include respond-below('sm') {
+      align-items: flex-end;
+      padding: 0;
+    }
+  }
+  
+  @keyframes modal-backdrop-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  
+  // ── Dialog panel ─────────────────────────────────────────────
+  .modal {
+    position: relative;
+    width: 100%;
+    background: $surface-1;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: $radius-2xl;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.04),
+      0 24px 80px rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - #{$space-8});
+    animation: modal-in $duration-slow $ease-out-back both;
+    outline: none; // focus managed programmatically
+  
+    @include respond-below('sm') {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      max-height: 90dvh;
+      animation-name: modal-in-bottom;
+    }
+  }
+  
+  // Desktop: scale + fade up
+  @keyframes modal-in {
+    from {
+      opacity: 0;
+      transform: scale(0.94) translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  
+  // Mobile: slide up from bottom
+  @keyframes modal-in-bottom {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  // ── Sizes ─────────────────────────────────────────────────────
+  .modal--sm  { max-width: 400px; }
+  .modal--md  { max-width: 560px; }
+  .modal--lg  { max-width: 720px; }
+  .modal--xl  { max-width: 960px; }
+  .modal--full {
+    max-width: calc(100vw - #{$space-8});
+    height: calc(100dvh - #{$space-8});
+  }
+  
+  // ── Header ────────────────────────────────────────────────────
+  .modal__header {
+    padding: $space-6 $space-6 0;
+    padding-right: calc(#{$space-6} + 40px); // leave room for close button
+  }
+  
+  .modal__title {
+    font-family: $font-display;
+    font-size: $text-xl;
+    font-weight: $weight-bold;
+    color: $ink;
+    letter-spacing: -0.01em;
+    line-height: $leading-tight;
+  }
+  
+  .modal__description {
+    margin-top: $space-2;
+    font-size: $text-sm;
+    color: $ink-muted;
+    line-height: $leading-relaxed;
+  }
+  
+  // ── Close button (CSS ✕) ──────────────────────────────────────
+  .modal__close {
+    position: absolute;
+    top: $space-4;
+    right: $space-4;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-md;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    @include transition(background border-color, $duration-fast, $ease-standard);
+  
+    // The two spans form a × using pseudo-element technique
+    span {
+      position: absolute;
+      width: 14px;
+      height: 1.5px;
+      background: $ink-muted;
+      border-radius: 1px;
+      @include transition(background, $duration-fast, $ease-standard);
+  
+      &:first-child { transform: rotate(45deg); }
+      &:last-child  { transform: rotate(-45deg); }
+    }
+  
+    &:hover {
+      background: $surface-3;
+      border-color: rgba(255, 255, 255, 0.14);
+  
+      span { background: $ink; }
+    }
+  
+    &:focus-visible {
+      @include focus-ring;
+    }
+  }
+  
+  // ── Body ──────────────────────────────────────────────────────
+  .modal__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: $space-6;
+    @include scrollbar-brand;
+  }
+  
+  // ── Footer ────────────────────────────────────────────────────
+  .modal__footer {
+    padding: $space-4 $space-6 $space-6;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: $space-3;
+    flex-shrink: 0;
+  
+    // Stack vertically on mobile
+    @include respond-below('sm') {
+      flex-direction: column-reverse;
+  
+      > * { width: 100%; }
+    }
+  }
