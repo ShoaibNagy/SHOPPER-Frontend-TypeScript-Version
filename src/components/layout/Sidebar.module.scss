@@ -1,0 +1,184 @@
+// ─────────────────────────────────────────────────────────────
+// Sidebar.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ── Panel ─────────────────────────────────────────────────────
+.sidebar {
+    width: 100%;
+    background: $surface-1;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  
+    // Mobile: fixed overlay panel, slides in from left
+    @include respond-below('lg') {
+      position: fixed;
+      top: $navbar-height;
+      left: 0;
+      bottom: 0;
+      width: min(320px, 90vw);
+      z-index: $z-drawer;
+      transform: translateX(-100%);
+      @include transition(transform, $duration-slow, $ease-out-expo);
+      box-shadow: 24px 0 64px rgba(0, 0, 0, 0.5);
+  
+      &--open {
+        transform: translateX(0);
+      }
+    }
+  
+    // Desktop: inline panel, always visible
+    @include respond-to('lg') {
+      position: sticky;
+      top: $navbar-height;
+      height: calc(100dvh - #{$navbar-height});
+      width: 260px;
+      flex-shrink: 0;
+      overflow-y: auto;
+      @include scrollbar-brand;
+    }
+  }
+  
+  // ── Header ────────────────────────────────────────────────────
+  .sidebar__header {
+    @include flex-between;
+    padding: $space-5 $space-5 $space-4;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+  
+    // Hide on desktop (heading is implicit from context)
+    @include respond-to('lg') { display: none; }
+  }
+  
+  .sidebar__header__title {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-bold;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $ink;
+  }
+  
+  .sidebar__header__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 $space-1;
+    background: $brand-500;
+    color: #fff;
+    font-size: 10px;
+    font-weight: $weight-black;
+    border-radius: $radius-full;
+  }
+  
+  .sidebar__header__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+  
+  .sidebar__clear {
+    font-family: $font-display;
+    font-size: 10px;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $brand-400;
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    @include transition(color background, $duration-fast, $ease-standard);
+  
+    &:hover {
+      color: $brand-300;
+      background: rgba($brand-500, 0.08);
+    }
+  }
+  
+  .sidebar__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-md;
+    color: $ink-faint;
+    @include transition(color background, $duration-fast, $ease-standard);
+  
+    &:hover { color: $ink; background: rgba(255, 255, 255, 0.06); }
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  // ── Body ──────────────────────────────────────────────────────
+  .sidebar__body {
+    flex: 1;
+    overflow-y: auto;
+    @include scrollbar-brand;
+  }
+  
+  // ── Backdrop (mobile) ─────────────────────────────────────────
+  .sidebar__backdrop {
+    display: none;
+  
+    @include respond-below('lg') {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: calc(#{$z-drawer} - 1);
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      animation: fade-in $duration-base $ease-standard both;
+    }
+  }
+  
+  // ── Accordion sections ────────────────────────────────────────
+  .accordion {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  
+    &[open] .accordion__chevron {
+      transform: rotate(180deg);
+    }
+  }
+  
+  .accordion__trigger {
+    @include flex-between;
+    padding: $space-4 $space-5;
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $ink-muted;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    @include transition(color, $duration-fast, $ease-standard);
+  
+    // Remove default marker
+    &::-webkit-details-marker { display: none; }
+    &::marker { display: none; }
+  
+    &:hover { color: $ink; }
+    &:focus-visible { @include focus-ring; border-radius: $radius-md; }
+  }
+  
+  .accordion__chevron {
+    flex-shrink: 0;
+    color: $ink-faint;
+    @include transition(transform color, $duration-base, $ease-out-expo);
+  
+    .accordion__trigger:hover & { color: $ink-muted; }
+  }
+  
+  .accordion__content {
+    padding: 0 $space-5 $space-5;
+    animation: fade-down $duration-base $ease-out-expo both;
+  }
