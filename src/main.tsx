@@ -10,6 +10,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from 'react-hot-toast';
 import App from './App';
 import './styles/main.scss';
+import './index.css';
 
 // ── TanStack Query client config ──────────────────────────────
 const queryClient = new QueryClient({
