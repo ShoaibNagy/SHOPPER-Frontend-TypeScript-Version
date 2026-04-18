@@ -1,0 +1,218 @@
+// ─────────────────────────────────────────────────────────────
+// Button.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ── Base ──────────────────────────────────────────────────────
+.btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    font-family: $font-display;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    @include transition(color background-color border-color box-shadow transform, $duration-base, $ease-out-back);
+  
+    // Sharp corners — no pill, no excess roundness
+    border-radius: $radius-sm;
+  
+    &:focus-visible {
+      @include focus-ring($brand-500);
+      outline-offset: 3px;
+    }
+  
+    &:disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  
+    // Subtle press feedback
+    &:active:not(:disabled) {
+      transform: scale(0.97);
+      transition-duration: $duration-fast;
+    }
+  }
+  
+  // ── Sizes ─────────────────────────────────────────────────────
+  .btn--sm {
+    height: 32px;
+    padding: 0 $space-3;
+    font-size: $text-xs;
+    gap: $space-1;
+  }
+  
+  .btn--md {
+    height: 44px;
+    padding: 0 $space-5;
+    font-size: $text-sm;
+  }
+  
+  .btn--lg {
+    height: 52px;
+    padding: 0 $space-8;
+    font-size: $text-base;
+  }
+  
+  .btn--xl {
+    height: 60px;
+    padding: 0 $space-10;
+    font-size: $text-lg;
+    letter-spacing: 0.06em;
+  }
+  
+  // ── Full width ────────────────────────────────────────────────
+  .btn--full {
+    width: 100%;
+  }
+  
+  // ── Variants ──────────────────────────────────────────────────
+  
+  // Primary — brand orange, glowing on hover
+  .btn--primary {
+    background: $brand-500;
+    border-color: $brand-500;
+    color: #fff;
+  
+    // Inset shine at top for depth
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+      opacity: 0;
+      @include transition(opacity, $duration-base, $ease-standard);
+    }
+  
+    &:hover:not(:disabled) {
+      background: $brand-400;
+      border-color: $brand-400;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 24px -4px rgba($brand-500, 0.6);
+  
+      &::before { opacity: 1; }
+    }
+  }
+  
+  // Secondary — dark surface, white text
+  .btn--secondary {
+    background: $surface-3;
+    border-color: rgba(255, 255, 255, 0.08);
+    color: $ink;
+  
+    &:hover:not(:disabled) {
+      background: $surface-4;
+      border-color: rgba(255, 255, 255, 0.14);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+  }
+  
+  // Ghost — transparent, brand text
+  .btn--ghost {
+    background: transparent;
+    border-color: transparent;
+    color: $brand-400;
+  
+    &:hover:not(:disabled) {
+      background: rgba($brand-500, 0.08);
+      color: $brand-300;
+    }
+  }
+  
+  // Outline — transparent with brand border
+  .btn--outline {
+    background: transparent;
+    border-color: $brand-500;
+    color: $brand-400;
+  
+    &:hover:not(:disabled) {
+      background: rgba($brand-500, 0.1);
+      color: $brand-300;
+      border-color: $brand-400;
+      box-shadow: 0 0 16px -4px rgba($brand-500, 0.4);
+    }
+  }
+  
+  // Danger — red destructive actions
+  .btn--danger {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  
+    &:hover:not(:disabled) {
+      background: #ef4444;
+      border-color: #ef4444;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 0 20px -4px rgba(220, 38, 38, 0.5);
+    }
+  }
+  
+  // ── Inner content wrapper ─────────────────────────────────────
+  .btn__content {
+    display: inline-flex;
+    align-items: center;
+    gap: inherit;
+    @include transition(opacity, $duration-fast, $ease-standard);
+  
+    &--hidden {
+      opacity: 0;
+    }
+  }
+  
+  // ── Icon slots ────────────────────────────────────────────────
+  .btn__icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    // Icon sized relative to the button's font-size
+    font-size: 1.15em;
+    line-height: 1;
+  }
+  
+  .btn__icon--right {
+    margin-left: auto;
+  }
+  
+  // ── Loading state ─────────────────────────────────────────────
+  .btn--loading {
+    cursor: wait;
+    pointer-events: none;
+  }
+  
+  .btn__spinner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    &::after {
+      content: '';
+      width: 1.1em;
+      height: 1.1em;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      opacity: 0.9;
+      animation: btn-spin 0.65s linear infinite;
+    }
+  }
+  
+  @keyframes btn-spin {
+    to { transform: rotate(360deg); }
+  }
