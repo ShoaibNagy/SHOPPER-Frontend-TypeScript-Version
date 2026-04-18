@@ -1,0 +1,78 @@
+// ─────────────────────────────────────────────────────────────
+// Pagination.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    user-select: none;
+  }
+  
+  // ── Page button ───────────────────────────────────────────────
+  .page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 $space-2;
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.04em;
+    color: $ink-muted;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: $radius-md;
+    cursor: pointer;
+    @include transition(color background border-color, $duration-fast, $ease-standard);
+  
+    &:hover:not(:disabled) {
+      color: $ink;
+      background: $surface-2;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+  
+    &:focus-visible {
+      @include focus-ring;
+    }
+  
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  
+    // Active / current page
+    &--active {
+      color: $brand-500;
+      background: rgba($brand-500, 0.1);
+      border-color: rgba($brand-500, 0.3);
+      cursor: default;
+      pointer-events: none;
+  
+      &:hover { background: rgba($brand-500, 0.1); }
+    }
+  
+    // Prev / Next arrow buttons
+    &--arrow {
+      color: $ink-muted;
+    }
+  }
+  
+  // ── Ellipsis ──────────────────────────────────────────────────
+  .page__dots {
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding-bottom: 6px;
+    font-size: $text-sm;
+    color: $ink-faint;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+  }
