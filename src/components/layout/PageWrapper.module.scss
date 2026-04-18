@@ -1,0 +1,16 @@
+// ─────────────────────────────────────────────────────────────
+// PageWrapper.module.scss
+// ─────────────────────────────────────────────────────────────
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+  
+  .main {
+    flex: 1;
+    // Pages that need a full-bleed hero (e.g. Home) control their
+    // own padding. Pages that need contained content use the
+    // .container mixin or Tailwind container classes directly.
+  }
