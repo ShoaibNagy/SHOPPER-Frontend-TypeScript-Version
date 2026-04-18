@@ -1,0 +1,490 @@
+// ─────────────────────────────────────────────────────────────
+// Navbar.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ── Shell ─────────────────────────────────────────────────────
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: $z-sticky;
+    width: 100%;
+    background: transparent;
+    // Start transparent; becomes solid on scroll (via --scrolled modifier)
+    @include transition(background border-color box-shadow, $duration-slow, $ease-standard);
+  
+    // Hairline bottom border — invisible when transparent, subtle when scrolled
+    border-bottom: 1px solid transparent;
+  
+    &--scrolled {
+      background: rgba(10, 10, 10, 0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+  
+    // When mobile menu is open keep it opaque
+    &--menu-open {
+      background: $surface;
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+  }
+  
+  // ── Inner row ─────────────────────────────────────────────────
+  .navbar__inner {
+    @include container;
+    height: $navbar-height;
+    display: flex;
+    align-items: center;
+    gap: $space-8;
+  }
+  
+  // ── Logo ──────────────────────────────────────────────────────
+  .navbar__logo {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-shrink: 0;
+    text-decoration: none;
+  
+    &:focus-visible { @include focus-ring; border-radius: $radius-md; }
+  }
+  
+  .navbar__logo__text {
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-black;
+    letter-spacing: 0.12em;
+    color: $ink;
+    @include transition(color, $duration-fast, $ease-standard);
+  
+    .navbar__logo:hover & { color: $brand-400; }
+  }
+  
+  // ── Desktop navigation links ──────────────────────────────────
+  .navbar__nav {
+    display: none;
+    align-items: center;
+    gap: $space-1;
+    margin-left: $space-4;
+    flex: 1;
+  
+    @include respond-to('lg') { display: flex; }
+  }
+  
+  .navbar__link {
+    position: relative;
+    padding: $space-2 $space-3;
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $ink-muted;
+    border-radius: $radius-md;
+    @include transition(color background, $duration-fast, $ease-standard);
+  
+    // Animated underline
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: $space-3;
+      right: $space-3;
+      height: 1.5px;
+      background: $brand-500;
+      transform: scaleX(0);
+      transform-origin: left;
+      @include transition(transform, $duration-base, $ease-out-expo);
+    }
+  
+    &:hover {
+      color: $ink;
+      background: rgba(255, 255, 255, 0.04);
+  
+      &::after { transform: scaleX(1); }
+    }
+  
+    &--active {
+      color: $ink;
+  
+      &::after { transform: scaleX(1); }
+    }
+  
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  // ── Actions (right side) ──────────────────────────────────────
+  .navbar__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    margin-left: auto;
+  }
+  
+  // ── Icon button (search, user) ────────────────────────────────
+  .navbar__icon_btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-md;
+    color: $ink-muted;
+    @include transition(color background, $duration-fast, $ease-standard);
+    text-decoration: none;
+  
+    &:hover, &--active {
+      color: $ink;
+      background: rgba(255, 255, 255, 0.06);
+    }
+  
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  .navbar__avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+  }
+  
+  // ── Cart button (special — has badge) ────────────────────────
+  .navbar__cart_btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-md;
+    color: $ink-muted;
+    @include transition(color background, $duration-fast, $ease-standard);
+  
+    &:hover {
+      color: $ink;
+      background: rgba(255, 255, 255, 0.06);
+    }
+  
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  .navbar__cart_badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    background: $brand-500;
+    color: #fff;
+    font-family: $font-display;
+    font-size: 9px;
+    font-weight: $weight-black;
+    letter-spacing: 0;
+    border-radius: $radius-full;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    animation: badge-pop $duration-base $ease-out-back both;
+  }
+  
+  @keyframes badge-pop {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  
+  // ── User dropdown ─────────────────────────────────────────────
+  .navbar__user {
+    position: relative;
+  
+    &:hover .navbar__user__dropdown,
+    &:focus-within .navbar__user__dropdown {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      visibility: visible;
+    }
+  }
+  
+  .navbar__user__dropdown {
+    position: absolute;
+    top: calc(100% + $space-2);
+    right: 0;
+    min-width: 180px;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: $radius-xl;
+    padding: $space-2;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    visibility: hidden;
+    @include transition(opacity transform visibility, $duration-base, $ease-out-expo);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+    z-index: $z-dropdown;
+  }
+  
+  .dropdown__item {
+    display: block;
+    width: 100%;
+    padding: $space-2 $space-3;
+    font-family: $font-body;
+    font-size: $text-sm;
+    color: $ink-muted;
+    border-radius: $radius-md;
+    text-align: left;
+    @include transition(color background, $duration-fast, $ease-standard);
+    text-decoration: none;
+  
+    &:hover {
+      color: $ink;
+      background: rgba(255, 255, 255, 0.06);
+    }
+  
+    &--danger {
+      color: #ef4444;
+  
+      &:hover {
+        color: #f87171;
+        background: rgba(239, 68, 68, 0.08);
+      }
+    }
+  }
+  
+  // ── Search bar ────────────────────────────────────────────────
+  .navbar__search {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    @include transition(max-height opacity, $duration-slow, $ease-out-expo);
+    border-top: 1px solid transparent;
+  
+    &--open {
+      max-height: 72px;
+      opacity: 1;
+      border-top-color: rgba(255, 255, 255, 0.06);
+    }
+  }
+  
+  .navbar__search__form {
+    @include container;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  
+    // Dim the search icon
+    > svg { color: $ink-faint; flex-shrink: 0; }
+  }
+  
+  .navbar__search__input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: $font-body;
+    font-size: $text-base;
+    color: $ink;
+    caret-color: $brand-500;
+  
+    &::placeholder { color: $ink-faint; }
+    // Hide browser's native clear button on search inputs
+    &::-webkit-search-cancel-button { display: none; }
+  }
+  
+  .navbar__search__submit {
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $brand-400;
+    padding: $space-2 $space-3;
+    border-radius: $radius-md;
+    @include transition(color background, $duration-fast, $ease-standard);
+  
+    &:hover {
+      color: $brand-300;
+      background: rgba($brand-500, 0.08);
+    }
+  }
+  
+  .navbar__search__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-md;
+    color: $ink-faint;
+    @include transition(color background, $duration-fast, $ease-standard);
+  
+    &:hover { color: $ink; background: rgba(255,255,255,0.06); }
+  }
+  
+  // ── Hamburger (mobile) ────────────────────────────────────────
+  .navbar__hamburger {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    padding: $space-2;
+    border-radius: $radius-md;
+    @include transition(background, $duration-fast, $ease-standard);
+  
+    @include respond-to('lg') { display: none; }
+  
+    span {
+      display: block;
+      height: 1.5px;
+      background: $ink-muted;
+      border-radius: 1px;
+      @include transition(width transform opacity background, $duration-base, $ease-out-expo);
+  
+      &:nth-child(1) { width: 22px; }
+      &:nth-child(2) { width: 16px; }
+      &:nth-child(3) { width: 22px; }
+    }
+  
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+      span { background: $ink; }
+      span:nth-child(2) { width: 22px; }
+    }
+  
+    // Morphs into × when open
+    &--open {
+      span {
+        background: $ink;
+  
+        &:nth-child(1) {
+          width: 22px;
+          transform: translateY(6.5px) rotate(45deg);
+        }
+  
+        &:nth-child(2) {
+          opacity: 0;
+          transform: scaleX(0);
+        }
+  
+        &:nth-child(3) {
+          width: 22px;
+          transform: translateY(-6.5px) rotate(-45deg);
+        }
+      }
+    }
+  }
+  
+  // ── Mobile menu panel ─────────────────────────────────────────
+  .mobile_menu {
+    position: fixed;
+    inset: $navbar-height 0 0 0;
+    z-index: calc(#{$z-sticky} - 1);
+    background: $surface;
+    display: flex;
+    flex-direction: column;
+    padding: $space-6 $space-4 $space-8;
+    transform: translateX(100%);
+    @include transition(transform, $duration-slow, $ease-out-expo);
+    overflow-y: auto;
+    @include scrollbar-hidden;
+  
+    @include respond-to('lg') { display: none; }
+  
+    &--open {
+      transform: translateX(0);
+    }
+  }
+  
+  .mobile_menu__nav {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+  }
+  
+  .mobile_menu__link {
+    display: block;
+    padding: $space-3 $space-4;
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $ink-muted;
+    border-radius: $radius-lg;
+    @include transition(color background, $duration-fast, $ease-standard);
+    text-decoration: none;
+    opacity: 0;
+    transform: translateX(16px);
+  
+    .mobile_menu--open & {
+      animation: menu-link-in $duration-slow $ease-out-expo both;
+    }
+  
+    &:hover {
+      color: $ink;
+      background: rgba(255, 255, 255, 0.04);
+    }
+  
+    &--active {
+      color: $brand-400;
+    }
+  
+    &--danger { color: #ef4444; }
+    &--cta {
+      color: $brand-400;
+      border: 1px solid rgba($brand-500, 0.3);
+      background: rgba($brand-500, 0.06);
+      margin-top: $space-2;
+  
+      &:hover { background: rgba($brand-500, 0.12); }
+    }
+  }
+  
+  @keyframes menu-link-in {
+    from { opacity: 0; transform: translateX(16px); }
+    to   { opacity: 1; transform: translateX(0);    }
+  }
+  
+  .mobile_menu__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: $space-4 $space-4;
+  }
+  
+  .mobile_menu__cart {
+    @include flex-center;
+    gap: $space-3;
+    width: 100%;
+    height: 56px;
+    margin-top: auto;
+    padding-top: $space-6;
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $ink;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    position: relative;
+  
+    &:hover { color: $brand-400; }
+  }
+  
+  .mobile_menu__backdrop {
+    @include absolute-fill;
+    position: fixed;
+    z-index: calc(#{$z-sticky} - 2);
+    background: transparent;
+  
+    @include respond-to('lg') { display: none; }
+  }
