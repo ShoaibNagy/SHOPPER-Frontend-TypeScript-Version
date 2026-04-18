@@ -1,0 +1,240 @@
+// ─────────────────────────────────────────────────────────────
+// Footer.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.footer {
+    background: $surface-1;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin-top: auto; // push to bottom in flex column layout
+  }
+  
+  // ── Main grid ─────────────────────────────────────────────────
+  .footer__grid {
+    @include container;
+    padding-top: $space-16;
+    padding-bottom: $space-12;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-10;
+  
+    @include respond-to('md') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  
+    @include respond-to('lg') {
+      grid-template-columns: 2fr repeat(3, 1fr) 2fr;
+      gap: $space-8;
+    }
+  }
+  
+  // ── Brand column ──────────────────────────────────────────────
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+  }
+  
+  .footer__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    text-decoration: none;
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-black;
+    letter-spacing: 0.12em;
+    color: $ink;
+    width: fit-content;
+  
+    &:hover { color: $brand-400; }
+    &:focus-visible { @include focus-ring; border-radius: $radius-md; }
+  }
+  
+  .footer__tagline {
+    font-size: $text-sm;
+    color: $ink-faint;
+    line-height: $leading-relaxed;
+    max-width: 22ch;
+  }
+  
+  // ── Social icons ──────────────────────────────────────────────
+  .footer__social {
+    display: flex;
+    gap: $space-2;
+  }
+  
+  .footer__social__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-md;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: $ink-faint;
+    @include transition(color border-color background, $duration-fast, $ease-standard);
+  
+    &:hover {
+      color: $ink;
+      border-color: rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.04);
+    }
+  
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  // ── Nav columns ───────────────────────────────────────────────
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+  
+  .footer__col__heading {
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $ink;
+  }
+  
+  .footer__col__list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+  }
+  
+  .footer__col__link {
+    font-size: $text-sm;
+    color: $ink-faint;
+    @include transition(color, $duration-fast, $ease-standard);
+    text-decoration: none;
+  
+    &:hover { color: $ink; }
+    &:focus-visible { @include focus-ring; border-radius: $radius-sm; }
+  }
+  
+  // ── Newsletter column ─────────────────────────────────────────
+  .footer__newsletter {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  
+    @include respond-to('md') {
+      grid-column: 1 / -1;
+    }
+  
+    @include respond-to('lg') {
+      grid-column: auto;
+    }
+  }
+  
+  .footer__newsletter__copy {
+    font-size: $text-sm;
+    color: $ink-faint;
+    line-height: $leading-relaxed;
+    margin-top: -$space-2;
+  }
+  
+  .footer__newsletter__form {
+    display: flex;
+    gap: $space-2;
+    flex-wrap: wrap;
+  
+    @include respond-to('sm') {
+      flex-wrap: nowrap;
+    }
+  }
+  
+  .footer__newsletter__input {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    padding: 0 $space-4;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: $radius-md;
+    font-family: $font-body;
+    font-size: $text-sm;
+    color: $ink;
+    caret-color: $brand-500;
+    @include transition(border-color box-shadow, $duration-fast, $ease-standard);
+    outline: none;
+  
+    &::placeholder { color: $ink-faint; }
+  
+    &:focus {
+      border-color: $brand-500;
+      box-shadow: 0 0 0 3px rgba($brand-500, 0.12);
+    }
+  }
+  
+  .footer__newsletter__btn {
+    height: 44px;
+    padding: 0 $space-5;
+    background: $brand-500;
+    color: #fff;
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: $radius-md;
+    white-space: nowrap;
+    @include transition(background box-shadow, $duration-base, $ease-standard);
+  
+    &:hover {
+      background: $brand-400;
+      box-shadow: 0 0 20px -4px rgba($brand-500, 0.5);
+    }
+  
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  .footer__newsletter__success {
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.06em;
+    color: $brand-400;
+    animation: fade-up $duration-slow $ease-out-expo both;
+  }
+  
+  // ── Bottom legal bar ──────────────────────────────────────────
+  .footer__bottom {
+    @include container;
+    padding-top: $space-5;
+    padding-bottom: $space-6;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: $space-4;
+  }
+  
+  .footer__copyright {
+    font-size: $text-xs;
+    color: $ink-faint;
+    // Don't use the global <p> muted color — this is intentionally dimmer
+    margin: 0;
+  }
+  
+  .footer__legal {
+    display: flex;
+    gap: $space-5;
+  }
+  
+  .footer__legal__link {
+    font-size: $text-xs;
+    color: $ink-faint;
+    @include transition(color, $duration-fast, $ease-standard);
+    text-decoration: none;
+  
+    &:hover { color: $ink-muted; }
+    &:focus-visible { @include focus-ring; border-radius: $radius-sm; }
+  }
