@@ -1,0 +1,176 @@
+// ─────────────────────────────────────────────────────────────
+// Input.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ── Field wrapper ─────────────────────────────────────────────
+.field {
+    display: inline-flex;
+    flex-direction: column;
+    gap: $space-2;
+  
+    &--full {
+      width: 100%;
+    }
+  }
+  
+  // ── Label ─────────────────────────────────────────────────────
+  .field__label {
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $ink-muted;
+    @include transition(color, $duration-fast, $ease-standard);
+  }
+  
+  .field__required {
+    color: $brand-500;
+  }
+  
+  // ── Input wrap (relative container for icons) ─────────────────
+  .field__wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: $radius-md;
+    @include transition(border-color box-shadow, $duration-base, $ease-standard);
+  
+    // Focus-within — highlight the whole wrap when input is focused
+    &:focus-within {
+      border-color: $brand-500;
+      box-shadow: 0 0 0 3px rgba($brand-500, 0.15);
+  
+      // Also brighten the label when focused
+      ~ .field__label { color: $brand-400; }
+    }
+  
+    &:hover:not(.field__wrap--disabled):not(.field__wrap--error) {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+  
+    // Error state
+    &--error {
+      border-color: #ef4444;
+  
+      &:focus-within {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+      }
+    }
+  
+    // Disabled
+    &--disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      background: $surface-1;
+    }
+  }
+  
+  // ── Sizes ─────────────────────────────────────────────────────
+  .field__wrap--sm { height: 36px; }
+  .field__wrap--md { height: 48px; }
+  .field__wrap--lg { height: 56px; }
+  
+  // ── Input element ─────────────────────────────────────────────
+  .field__input {
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0 $space-4;
+    font-family: $font-body;
+    font-size: $text-sm;
+    color: $ink;
+    caret-color: $brand-500;
+  
+    // Size-specific font sizes
+    .field__wrap--lg & { font-size: $text-base; }
+    .field__wrap--sm & { font-size: $text-xs; padding: 0 $space-3; }
+  
+    &::placeholder {
+      color: $ink-faint;
+    }
+  
+    // Disabled cursor on the input itself
+    &:disabled {
+      cursor: not-allowed;
+    }
+  
+    // When there's a prefix icon — add left padding
+    &--prefix {
+      padding-left: 0;
+    }
+  
+    // When there's a suffix icon — add right padding
+    &--suffix {
+      padding-right: 0;
+    }
+  
+    // Remove browser default password eye icon in Edge
+    &::-ms-reveal { display: none; }
+    &::-webkit-contacts-auto-fill-button { display: none; }
+  }
+  
+  // ── Prefix icon ───────────────────────────────────────────────
+  .field__prefix {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    color: $ink-faint;
+    font-size: 1rem;
+    pointer-events: none;
+    @include transition(color, $duration-fast, $ease-standard);
+  
+    .field__wrap:focus-within & {
+      color: $brand-500;
+    }
+  }
+  
+  // ── Suffix icon / action ──────────────────────────────────────
+  .field__suffix {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    color: $ink-faint;
+    font-size: 1rem;
+    pointer-events: none;
+  
+    &--action {
+      pointer-events: auto;
+      cursor: pointer;
+      border-radius: $radius-sm;
+      @include transition(color, $duration-fast, $ease-standard);
+  
+      &:hover { color: $ink; }
+      &:focus-visible { @include focus-ring; }
+    }
+  }
+  
+  // ── Error message ─────────────────────────────────────────────
+  .field__error {
+    font-family: $font-body;
+    font-size: $text-xs;
+    color: #ef4444;
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    animation: fade-up 0.2s $ease-out-expo both;
+  }
+  
+  // ── Hint text ─────────────────────────────────────────────────
+  .field__hint {
+    font-family: $font-body;
+    font-size: $text-xs;
+    color: $ink-faint;
+  }
