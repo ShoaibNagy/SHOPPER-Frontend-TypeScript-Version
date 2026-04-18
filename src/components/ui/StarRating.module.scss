@@ -1,0 +1,145 @@
+// ─────────────────────────────────────────────────────────────
+// StarRating.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+$star-color: #f59e0b; // Amber — distinct from brand orange
+
+// ── Shared star SVG ───────────────────────────────────────────
+.star {
+  display: block;
+  fill: $surface-3;
+  @include transition(fill transform, $duration-fast, $ease-out-back);
+}
+
+.star--filled {
+  fill: $star-color;
+}
+
+// ─────────────────────────────────────────────────────────────
+// Display (read-only) mode
+// ─────────────────────────────────────────────────────────────
+
+.display {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  position: relative;
+  white-space: nowrap;
+}
+
+// ── Star layer stack ──────────────────────────────────────────
+// Empty and filled layers are stacked; filled is clipped by width%
+.display__empty,
+.display__filled {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.display__empty {
+  // Base layer
+}
+
+.display__filled {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  overflow: hidden;
+  // width is set inline to the fill percentage
+}
+
+// ── Sizes ─────────────────────────────────────────────────────
+.display--sm .star  { width: 12px; height: 12px; }
+.display--md .star  { width: 16px; height: 16px; }
+.display--lg .star  { width: 22px; height: 22px; }
+
+.display__value {
+  font-family: $font-display;
+  font-weight: $weight-bold;
+  color: $star-color;
+  font-size: inherit;
+}
+
+.display__count {
+  color: $ink-faint;
+  font-size: 0.875em;
+}
+
+.display--sm .display__value,
+.display--sm .display__count { font-size: $text-xs; }
+
+.display--md .display__value,
+.display--md .display__count { font-size: $text-sm; }
+
+.display--lg .display__value,
+.display--lg .display__count { font-size: $text-base; }
+
+// ─────────────────────────────────────────────────────────────
+// Interactive (input) mode
+// ─────────────────────────────────────────────────────────────
+
+.input {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+// ── Individual star label ─────────────────────────────────────
+.input__star {
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  @include transition(transform, $duration-fast, $ease-out-back);
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  &--active .star {
+    fill: $star-color;
+  }
+}
+
+// Visually hide the actual radio input
+.input__radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+
+  // Keyboard focus — show ring on the label
+  &:focus-visible + .star {
+    outline: 2px solid $brand-500;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+// ── Sizes for input mode ──────────────────────────────────────
+.input--sm .star  { width: 20px; height: 20px; }
+.input--md .star  { width: 28px; height: 28px; }
+.input--lg .star  { width: 36px; height: 36px; }
+
+// ── Disabled ──────────────────────────────────────────────────
+.input--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+// ── Hover label (e.g. "Excellent") ───────────────────────────
+.input__label {
+  font-family: $font-display;
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $star-color;
+  animation: fade-in $duration-fast $ease-standard both;
+}
