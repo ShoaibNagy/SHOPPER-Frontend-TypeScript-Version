@@ -70,6 +70,7 @@ export type ProductSummary = Pick<
   | 'isFeatured'
   | 'isNew'
   | 'totalStock'
+  | 'variants'
 >;
 
 // ── Query params for GET /products ───────────────────────────
