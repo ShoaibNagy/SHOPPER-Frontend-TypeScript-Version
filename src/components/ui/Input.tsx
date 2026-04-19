@@ -9,7 +9,7 @@ import styles from './Input.module.scss';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  error?: string;
+  error?: string | undefined;
   hint?: string;
   prefixIcon?: ReactNode;
   suffixIcon?: ReactNode;
