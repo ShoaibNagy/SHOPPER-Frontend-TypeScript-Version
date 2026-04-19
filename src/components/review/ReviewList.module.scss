@@ -1,0 +1,257 @@
+// ─────────────────────────────────────────────────────────────
+// ReviewList.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: $space-8;
+  }
+  
+  .section__heading {
+    display: flex;
+    align-items: baseline;
+    gap: $space-3;
+    font-family: $font-display;
+    font-size: $text-2xl;
+    font-weight: $weight-bold;
+    color: $ink;
+    letter-spacing: -0.02em;
+  }
+  
+  .section__count {
+    font-size: $text-sm;
+    font-weight: $weight-regular;
+    font-family: $font-body;
+    color: $ink-faint;
+  }
+  
+  // ── Two-column layout ─────────────────────────────────────────
+  .layout {
+    display: flex;
+    flex-direction: column;
+    gap: $space-8;
+  
+    @include respond-to('lg') {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: $space-12;
+    }
+  }
+  
+  // ── Histogram sidebar ─────────────────────────────────────────
+  .histogram_wrap {
+    @include respond-to('lg') {
+      width: 240px;
+      flex-shrink: 0;
+      position: sticky;
+      top: calc(#{$navbar-height} + #{$space-6});
+    }
+  }
+  
+  .histogram__avg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-2;
+    padding-bottom: $space-5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: $space-4;
+    text-align: center;
+  }
+  
+  .histogram__avg__number {
+    font-family: $font-display;
+    font-size: $text-5xl;
+    font-weight: $weight-black;
+    color: $ink;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  
+  .histogram__avg__count {
+    font-size: $text-xs;
+    color: $ink-faint;
+  }
+  
+  .histogram__bars {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+  
+  .histogram__bar_row {
+    display: grid;
+    grid-template-columns: 24px 1fr 28px;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-1 $space-2;
+    border-radius: $radius-md;
+    @include transition(background, $duration-fast, $ease-standard);
+    width: 100%;
+    cursor: pointer;
+  
+    &:hover { background: rgba(255, 255, 255, 0.04); }
+  
+    &--active {
+      background: rgba($brand-500, 0.07);
+  
+      .histogram__bar_fill { background: $brand-500; }
+      .histogram__bar_label { color: $brand-400; }
+    }
+  
+    &:focus-visible { @include focus-ring; border-radius: $radius-md; }
+  }
+  
+  .histogram__bar_label {
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    color: $ink-faint;
+    text-align: right;
+    @include transition(color, $duration-fast, $ease-standard);
+  }
+  
+  .histogram__bar_track {
+    height: 6px;
+    background: $surface-3;
+    border-radius: $radius-full;
+    overflow: hidden;
+  }
+  
+  .histogram__bar_fill {
+    height: 100%;
+    background: $surface-4;
+    border-radius: $radius-full;
+    @include transition(width background, $duration-slow, $ease-out-expo);
+    min-width: 2px;
+  }
+  
+  .histogram__bar_count {
+    font-size: $text-xs;
+    color: $ink-faint;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .histogram__clear {
+    margin-top: $space-3;
+    font-family: $font-display;
+    font-size: 10px;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $brand-400;
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    @include transition(color background, $duration-fast, $ease-standard);
+    width: 100%;
+    text-align: center;
+  
+    &:hover { color: $brand-300; background: rgba($brand-500, 0.06); }
+  }
+  
+  .histogram_skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+  }
+  
+  .histogram_skeleton__row {
+    height: 20px;
+    border-radius: $radius-md;
+  }
+  
+  // ── Reviews column ────────────────────────────────────────────
+  .reviews_col {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+  }
+  
+  // ── Sort bar ──────────────────────────────────────────────────
+  .sort_bar {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    flex-wrap: wrap;
+  }
+  
+  .sort_bar__label {
+    font-size: $text-xs;
+    color: $ink-faint;
+    white-space: nowrap;
+    font-family: $font-display;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  
+  .sort_bar__options {
+    display: flex;
+    gap: $space-1;
+    flex-wrap: wrap;
+  }
+  
+  .sort_btn {
+    height: 30px;
+    padding: 0 $space-3;
+    border-radius: $radius-md;
+    font-family: $font-body;
+    font-size: $text-xs;
+    color: $ink-faint;
+    border: 1px solid transparent;
+    @include transition(color background border-color, $duration-fast, $ease-standard);
+  
+    &:hover { color: $ink; background: $surface-2; }
+  
+    &--active {
+      color: $brand-400;
+      background: rgba($brand-500, 0.08);
+      border-color: rgba($brand-500, 0.25);
+    }
+  
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  // ── Review list ───────────────────────────────────────────────
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+  
+  // ── Loading ───────────────────────────────────────────────────
+  .loading_wrap {
+    padding: $space-16 0;
+  }
+  
+  // ── Empty ─────────────────────────────────────────────────────
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-4;
+    padding: $space-16 $space-8;
+    text-align: center;
+    color: $ink-faint;
+    opacity: 0.6;
+  }
+  
+  .empty__text {
+    font-size: $text-sm;
+    color: $ink-faint;
+  }
+  
+  // ── Pagination ────────────────────────────────────────────────
+  .pagination_wrap {
+    display: flex;
+    justify-content: center;
+    padding-top: $space-4;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
