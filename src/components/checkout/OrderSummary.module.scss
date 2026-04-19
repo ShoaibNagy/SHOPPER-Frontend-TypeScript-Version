@@ -1,0 +1,227 @@
+// ─────────────────────────────────────────────────────────────
+// OrderSummary.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.summary {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: $radius-2xl;
+    overflow: hidden;
+  
+    // Sticky on desktop
+    @include respond-to('lg') {
+      position: sticky;
+      top: calc(#{$navbar-height} + #{$space-6});
+    }
+  }
+  
+  // ── Mobile toggle ─────────────────────────────────────────────
+  .summary__toggle {
+    @include flex-between;
+    width: 100%;
+    padding: $space-5;
+    @include transition(background, $duration-fast, $ease-standard);
+  
+    &:hover { background: rgba(255, 255, 255, 0.02); }
+    &:focus-visible { @include focus-ring; }
+  
+    // On desktop: always show expanded, hide the toggle button
+    @include respond-to('lg') {
+      pointer-events: none;
+    }
+  }
+  
+  .summary__toggle__left {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    color: $brand-400;
+  
+    svg:first-child { color: $brand-400; }
+  }
+  
+  .summary__toggle__label {
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $brand-400;
+  
+    @include respond-to('lg') { color: $ink; }
+  }
+  
+  .summary__toggle__chevron {
+    color: $brand-400;
+    @include transition(transform, $duration-base, $ease-out-expo);
+  
+    &--open { transform: rotate(180deg); }
+  }
+  
+  .summary__toggle__total {
+    font-family: $font-display;
+    font-size: $text-base;
+    font-weight: $weight-bold;
+    color: $ink;
+  }
+  
+  // ── Expandable items area ─────────────────────────────────────
+  .items_wrap {
+    max-height: 0;
+    overflow: hidden;
+    @include transition(max-height, $duration-slow, $ease-out-expo);
+  
+    // Always visible on desktop
+    @include respond-to('lg') {
+      max-height: none !important;
+      overflow: visible;
+    }
+  
+    &--open {
+      max-height: 480px;
+      overflow-y: auto;
+      @include scrollbar-brand;
+    }
+  }
+  
+  .items {
+    padding: 0 $space-5 $space-2;
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  
+    @include respond-to('lg') { padding-top: $space-2; }
+  }
+  
+  // ── Single item ───────────────────────────────────────────────
+  .item {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: $space-3;
+    align-items: center;
+  }
+  
+  .item__image_wrap {
+    position: relative;
+    width: 56px;
+    height: 68px;
+    border-radius: $radius-md;
+    overflow: hidden;
+    background: $surface-3;
+    flex-shrink: 0;
+  }
+  
+  .item__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .item__image_placeholder {
+    width: 100%;
+    height: 100%;
+    background: $surface-3;
+  }
+  
+  // Quantity badge — top-right corner of the image
+  .item__qty {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 4px;
+    background: $surface-4;
+    border: 1.5px solid $surface-1;
+    border-radius: $radius-full;
+    @include flex-center;
+    font-family: $font-display;
+    font-size: 10px;
+    font-weight: $weight-black;
+    color: $ink;
+    line-height: 1;
+  }
+  
+  .item__info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+  
+  .item__name {
+    font-size: $text-sm;
+    font-weight: $weight-medium;
+    color: $ink;
+    @include truncate;
+  }
+  
+  .item__variant {
+    font-size: $text-xs;
+    color: $ink-faint;
+  }
+  
+  .item__price {
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    color: $ink;
+    white-space: nowrap;
+  }
+  
+  // ── Totals ────────────────────────────────────────────────────
+  .totals {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    padding: 0 $space-5 $space-5;
+  }
+  
+  .totals__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  .row {
+    @include flex-between;
+    gap: $space-3;
+  
+    &--total {
+      .row__label {
+        font-family: $font-display;
+        font-size: $text-sm;
+        font-weight: $weight-bold;
+        color: $ink;
+      }
+  
+      .row__value {
+        font-family: $font-display;
+        font-size: $text-lg;
+        font-weight: $weight-black;
+        color: $ink;
+      }
+    }
+  }
+  
+  .row__label {
+    font-size: $text-sm;
+    color: $ink-muted;
+  
+    &--muted { color: $ink-faint; }
+  }
+  
+  .row__value {
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    color: $ink;
+  
+    &--success { color: #22c55e; }
+    &--muted   { color: $ink-faint; font-family: $font-body; font-weight: $weight-regular; font-style: italic; }
+  }
