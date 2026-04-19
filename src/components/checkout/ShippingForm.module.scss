@@ -1,0 +1,53 @@
+// ─────────────────────────────────────────────────────────────
+// ShippingForm.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+  }
+  
+  // ── Section (fieldset) ────────────────────────────────────────
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+    border: none;
+    padding: 0;
+    min-width: 0; // fix fieldset min-width bug in Chrome
+  }
+  
+  .section__legend {
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $ink-muted;
+    padding: 0;
+    margin-bottom: $space-2;
+    // Add a decorative left border
+    padding-left: $space-3;
+    border-left: 2px solid $brand-500;
+  }
+  
+  .section__body {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+  
+  // ── Two-column row ────────────────────────────────────────────
+  .row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-4;
+  
+    @include respond-to('sm') {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
