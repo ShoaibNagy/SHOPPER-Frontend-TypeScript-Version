@@ -1,0 +1,245 @@
+// ─────────────────────────────────────────────────────────────
+// PaymentForm.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+  }
+  
+  // ── Payment method cards ──────────────────────────────────────
+  .methods {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+  }
+  
+  .method_card {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-4;
+    background: $surface-2;
+    border: 1.5px solid rgba(255, 255, 255, 0.07);
+    border-radius: $radius-xl;
+    cursor: pointer;
+    @include transition(border-color background box-shadow, $duration-fast, $ease-standard);
+  
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.14);
+      background: $surface-3;
+    }
+  
+    &--selected {
+      border-color: $brand-500;
+      background: rgba($brand-500, 0.05);
+      box-shadow: 0 0 0 1px rgba($brand-500, 0.2);
+    }
+  
+    &:focus-within { @include focus-ring; border-radius: $radius-xl; }
+  }
+  
+  // Visually-hidden radio input
+  .method_radio {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  // Custom radio dot
+  .method_dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+    position: relative;
+    @include transition(border-color, $duration-fast, $ease-standard);
+  
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: $brand-500;
+      transform: translate(-50%, -50%) scale(0);
+      @include transition(transform, $duration-base, $ease-out-back);
+    }
+  
+    &--selected {
+      border-color: $brand-500;
+      &::after { transform: translate(-50%, -50%) scale(1); }
+    }
+  }
+  
+  .method_icon {
+    @include flex-center;
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-md;
+    background: $surface-3;
+    color: $ink-muted;
+    flex-shrink: 0;
+  
+    .method_card--selected & { color: $brand-400; background: rgba($brand-500, 0.1); }
+  }
+  
+  .method_text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .method_text__label {
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    color: $ink;
+    letter-spacing: 0.01em;
+  }
+  
+  .method_text__desc {
+    font-size: $text-xs;
+    color: $ink-faint;
+    @include truncate;
+  }
+  
+  // ── Stripe element wrapper ────────────────────────────────────
+  .stripe_form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+  }
+  
+  .stripe_element_wrap {
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: $radius-xl;
+    padding: $space-4;
+    min-height: 120px;
+    @include transition(border-color, $duration-fast, $ease-standard);
+  
+    &:focus-within {
+      border-color: $brand-500;
+    }
+  
+    &--loading {
+      @include flex-center;
+    }
+  }
+  
+  .stripe_loading {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    font-size: $text-sm;
+    color: $ink-faint;
+    padding: $space-4;
+  }
+  
+  // ── Error ─────────────────────────────────────────────────────
+  .error {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-2;
+    padding: $space-3 $space-4;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: $radius-lg;
+    font-size: $text-sm;
+    color: #f87171;
+    animation: fade-up $duration-base $ease-out-expo both;
+  
+    svg { flex-shrink: 0; margin-top: 1px; }
+  }
+  
+  // ── Submit button ─────────────────────────────────────────────
+  .submit_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    height: 56px;
+    width: 100%;
+    background: $brand-500;
+    color: #fff;
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: $radius-lg;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      0 4px 24px rgba($brand-500, 0.25);
+    @include transition(background opacity box-shadow, $duration-base, $ease-out-expo);
+  
+    &:hover:not(:disabled) {
+      background: $brand-400;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 8px 32px rgba($brand-500, 0.4);
+    }
+  
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  
+    &:focus-visible { @include focus-ring; border-radius: $radius-lg; }
+  }
+  
+  // ── Stripe security badge ────────────────────────────────────
+  .stripe_badge {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-2;
+    font-size: $text-xs;
+    color: $ink-faint;
+    line-height: $leading-relaxed;
+  
+    svg { flex-shrink: 0; margin-top: 1px; color: $ink-faint; }
+  }
+  
+  // ── COD form ──────────────────────────────────────────────────
+  .cod_form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+  }
+  
+  .cod_info {
+    display: flex;
+    gap: $space-4;
+    padding: $space-5;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: $radius-xl;
+    align-items: flex-start;
+  
+    svg { color: $ink-muted; flex-shrink: 0; margin-top: 2px; }
+  }
+  
+  .cod_info__title {
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    color: $ink;
+    margin-bottom: $space-1;
+  }
+  
+  .cod_info__desc {
+    font-size: $text-sm;
+    color: $ink-faint;
+    line-height: $leading-relaxed;
+  }
