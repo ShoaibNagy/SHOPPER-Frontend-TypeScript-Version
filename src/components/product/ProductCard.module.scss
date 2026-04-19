@@ -1,0 +1,370 @@
+// ─────────────────────────────────────────────────────────────
+// ProductCard.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ── Base card ─────────────────────────────────────────────────
+.card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: $surface-1;
+    border-radius: $radius-xl;
+    overflow: hidden;
+    @include transition(box-shadow transform, $duration-slow, $ease-out-expo);
+  
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: $box-shadow-card-hover;
+  
+      .card__image--primary  { opacity: 0; }
+      .card__image--hover    { opacity: 1; }
+      .card__quick_add       { transform: translateY(0); opacity: 1; }
+      .card__wishlist        { opacity: 1; transform: scale(1); }
+    }
+  }
+  
+  // ── List layout ───────────────────────────────────────────────
+  .card--list {
+    flex-direction: row;
+    border-radius: $radius-lg;
+  
+    .card__image_wrap {
+      width: 140px;
+      flex-shrink: 0;
+      aspect-ratio: auto;
+      height: 160px;
+      border-radius: $radius-lg $radius-lg 0 0;
+  
+      @include respond-to('sm') {
+        width: 180px;
+        height: 200px;
+        border-radius: $radius-lg 0 0 $radius-lg;
+      }
+    }
+  
+    .card__info {
+      padding: $space-4 $space-5;
+      justify-content: center;
+    }
+  
+    &:hover { transform: none; }
+  }
+  
+  // ── Sold-out dim ──────────────────────────────────────────────
+  .card--sold-out .card__image_wrap {
+    opacity: 0.55;
+    filter: grayscale(0.3);
+  }
+  
+  // ── Skeleton state ────────────────────────────────────────────
+  .card--skeleton {
+    pointer-events: none;
+  
+    .card__image_wrap {
+      height: 0;
+      padding-bottom: 125%;
+      aspect-ratio: unset;
+      border-radius: $radius-xl $radius-xl 0 0;
+    }
+  }
+  
+  // ── Image area ────────────────────────────────────────────────
+  .card__image_wrap {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: $surface-2;
+    display: block;
+    text-decoration: none;
+  
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  .card__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    @include transition(opacity transform, $duration-slow, $ease-out-expo);
+  }
+  
+  .card__image--primary {
+    opacity: 1;
+    z-index: 1;
+  }
+  
+  .card__image--hover {
+    opacity: 0;
+    z-index: 2;
+    transform: scale(1.03);
+  }
+  
+  .card:hover .card__image--hover { transform: scale(1); }
+  
+  .card__image_placeholder {
+    @include absolute-fill;
+    background: linear-gradient(135deg, $surface-2 0%, $surface-3 100%);
+  
+    // Subtle grain texture
+    &::after {
+      content: '';
+      @include absolute-fill;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+  }
+  
+  // ── Badges (top-left) ─────────────────────────────────────────
+  .card__badges {
+    position: absolute;
+    top: $space-3;
+    left: $space-3;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+  }
+  
+  .card__badge {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 $space-2;
+    font-family: $font-display;
+    font-size: 9px;
+    font-weight: $weight-black;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: $radius-sm;
+    line-height: 1;
+  
+    &--new {
+      background: $surface-4;
+      color: $ink;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  
+    &--sale {
+      background: $brand-500;
+      color: #fff;
+    }
+  
+    &--sold-out {
+      background: rgba(0, 0, 0, 0.7);
+      color: $ink-faint;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(4px);
+    }
+  }
+  
+  // ── Wishlist button (top-right) ───────────────────────────────
+  .card__wishlist {
+    position: absolute;
+    top: $space-3;
+    right: $space-3;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(10, 10, 10, 0.65);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: $ink-muted;
+    opacity: 0;
+    transform: scale(0.8);
+    @include transition(opacity transform color background, $duration-base, $ease-out-back);
+  
+    &--active {
+      color: $brand-400;
+      opacity: 1;
+      transform: scale(1);
+    }
+  
+    &:hover { color: $brand-300; background: rgba(10, 10, 10, 0.85); }
+    &:focus-visible { @include focus-ring; opacity: 1; transform: scale(1); }
+  }
+  
+  // ── Quick-add overlay (bottom of image, slides up on hover) ───
+  .card__quick_add {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    background: rgba(10, 10, 10, 0.88);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    transform: translateY(100%);
+    opacity: 0;
+    @include transition(transform opacity, $duration-base, $ease-out-expo);
+    cursor: pointer;
+  
+    &:hover { background: rgba($brand-500, 0.9); }
+    &:focus-visible { @include focus-ring; opacity: 1; transform: translateY(0); }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+  
+    &--loading { cursor: wait; }
+  }
+  
+  // ── Info block ────────────────────────────────────────────────
+  .card__info {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    padding: $space-3 $space-4 $space-4;
+    flex: 1;
+  }
+  
+  // ── Color swatches ────────────────────────────────────────────
+  .card__swatches {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: $space-1;
+  }
+  
+  .swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid transparent;
+    outline: 1.5px solid transparent;
+    cursor: pointer;
+    @include transition(outline-color transform, $duration-fast, $ease-out-back);
+    flex-shrink: 0;
+  
+    &:hover { transform: scale(1.25); }
+  
+    &--selected {
+      outline-color: $brand-500;
+      outline-offset: 2px;
+      transform: scale(1.15);
+    }
+  
+    &:focus-visible { @include focus-ring; border-radius: 50%; }
+  }
+  
+  .card__swatches__more {
+    font-size: 10px;
+    color: $ink-faint;
+    margin-left: 2px;
+  }
+  
+  // ── Category ──────────────────────────────────────────────────
+  .card__category {
+    font-family: $font-display;
+    font-size: 10px;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $ink-faint;
+  }
+  
+  // ── Name ──────────────────────────────────────────────────────
+  .card__name {
+    font-family: $font-body;
+    font-size: $text-sm;
+    font-weight: $weight-medium;
+    color: $ink;
+    @include truncate;
+    text-decoration: none;
+    margin-top: $space-1;
+    @include transition(color, $duration-fast, $ease-standard);
+  
+    &:hover { color: $brand-400; }
+    &:focus-visible { @include focus-ring; border-radius: $radius-sm; }
+  }
+  
+  // ── Rating ────────────────────────────────────────────────────
+  .card__rating {
+    margin-top: $space-1;
+  }
+  
+  // ── Price row ─────────────────────────────────────────────────
+  .card__price_row {
+    display: flex;
+    align-items: baseline;
+    gap: $space-2;
+    margin-top: $space-1;
+  }
+  
+  .card__price {
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-bold;
+    color: $ink;
+  
+    &--sale { color: $brand-400; }
+  }
+  
+  .card__price_original {
+    font-size: $text-xs;
+    color: $ink-faint;
+    text-decoration: line-through;
+  }
+  
+  // ── List layout add button ────────────────────────────────────
+  .card__add_btn {
+    margin-top: $space-3;
+    height: 40px;
+    padding: 0 $space-4;
+    background: $surface-3;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: $radius-md;
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $ink-muted;
+    align-self: flex-start;
+    @include transition(color background border-color, $duration-fast, $ease-standard);
+  
+    &:hover {
+      color: $ink;
+      background: $surface-4;
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+  
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  // ── Skeleton blocks ───────────────────────────────────────────
+  .sk__category {
+    height: 10px;
+    width: 60px;
+    border-radius: $radius-sm;
+  }
+  
+  .sk__name {
+    height: 14px;
+    width: 90%;
+    border-radius: $radius-sm;
+  
+    &--short { width: 60%; }
+  }
+  
+  .sk__price {
+    height: 14px;
+    width: 50px;
+    border-radius: $radius-sm;
+    margin-top: $space-2;
+  }
