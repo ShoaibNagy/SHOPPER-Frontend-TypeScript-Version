@@ -1,0 +1,229 @@
+// ─────────────────────────────────────────────────────────────
+// ReviewForm.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+  }
+  
+  // ── Field wrapper ─────────────────────────────────────────────
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+  
+  .field__label {
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $ink-muted;
+  }
+  
+  .field__label__optional {
+    font-family: $font-body;
+    font-weight: $weight-regular;
+    text-transform: none;
+    letter-spacing: normal;
+    color: $ink-faint;
+  }
+  
+  .field__error {
+    font-size: $text-xs;
+    color: #ef4444;
+    animation: fade-up $duration-base $ease-out-expo both;
+  }
+  
+  // ── Textarea ──────────────────────────────────────────────────
+  .textarea {
+    width: 100%;
+    padding: $space-3 $space-4;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: $radius-lg;
+    font-family: $font-body;
+    font-size: $text-sm;
+    color: $ink;
+    line-height: $leading-relaxed;
+    resize: vertical;
+    outline: none;
+    caret-color: $brand-500;
+    @include transition(border-color box-shadow, $duration-fast, $ease-standard);
+    min-height: 120px;
+  
+    &::placeholder { color: $ink-faint; }
+  
+    &:focus {
+      border-color: $brand-500;
+      box-shadow: 0 0 0 3px rgba($brand-500, 0.1);
+    }
+  
+    &--error {
+      border-color: #ef4444;
+  
+      &:focus { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12); }
+    }
+  
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+  }
+  
+  // ── Image upload area ─────────────────────────────────────────
+  .images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-3;
+  }
+  
+  .image_preview {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: $radius-lg;
+    overflow: visible;
+    flex-shrink: 0;
+  }
+  
+  .image_preview__img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: $radius-lg;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .image_preview__remove {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: $surface-4;
+    border: 1.5px solid $surface-1;
+    @include flex-center;
+    font-size: 14px;
+    color: $ink;
+    line-height: 1;
+    @include transition(background color, $duration-fast, $ease-standard);
+    z-index: 1;
+  
+    &:hover {
+      background: #ef4444;
+      color: #fff;
+    }
+  
+    &:focus-visible { @include focus-ring; border-radius: 50%; }
+  }
+  
+  .image_upload_btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $space-1;
+    width: 80px;
+    height: 80px;
+    border-radius: $radius-lg;
+    border: 1.5px dashed rgba(255, 255, 255, 0.15);
+    background: $surface-2;
+    color: $ink-faint;
+    font-size: 10px;
+    @include transition(color border-color background, $duration-fast, $ease-standard);
+  
+    &:hover:not(:disabled) {
+      color: $ink-muted;
+      border-color: rgba(255, 255, 255, 0.28);
+      background: $surface-3;
+    }
+  
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:focus-visible { @include focus-ring; border-radius: $radius-lg; }
+  }
+  
+  .file_input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+  
+  // ── Actions row ───────────────────────────────────────────────
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: $space-3;
+    padding-top: $space-2;
+  }
+  
+  .cancel_btn {
+    height: 44px;
+    padding: 0 $space-5;
+    border-radius: $radius-md;
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $ink-faint;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    @include transition(color background, $duration-fast, $ease-standard);
+  
+    &:hover { color: $ink; background: $surface-2; }
+    &:disabled { opacity: 0.45; cursor: not-allowed; }
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  .submit_btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    height: 44px;
+    padding: 0 $space-6;
+    background: $brand-500;
+    color: #fff;
+    border-radius: $radius-md;
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    @include transition(background box-shadow, $duration-base, $ease-standard);
+  
+    &:hover:not(:disabled) {
+      background: $brand-400;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 20px -4px rgba($brand-500, 0.5);
+    }
+  
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+    &:focus-visible { @include focus-ring; border-radius: $radius-md; }
+  }
+  
+  // ── Eligibility gate ──────────────────────────────────────────
+  .gate {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-5;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: $radius-xl;
+    color: $ink-faint;
+  }
+  
+  .gate__text {
+    font-size: $text-sm;
+    color: $ink-faint;
+    line-height: $leading-relaxed;
+  }
