@@ -1,0 +1,231 @@
+// ─────────────────────────────────────────────────────────────
+// CartItem.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ── Row ───────────────────────────────────────────────────────
+.item {
+    display: grid;
+    grid-template-columns: 100px 1fr 36px;
+    gap: $space-4;
+    padding: $space-5 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    @include transition(opacity, $duration-base, $ease-standard);
+  
+    @include respond-to('sm') {
+      grid-template-columns: 120px 1fr 36px;
+      gap: $space-5;
+    }
+  
+    &:last-child { border-bottom: none; }
+  
+    &--processing {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+  }
+  
+  // ── Image ─────────────────────────────────────────────────────
+  .item__image_wrap {
+    display: block;
+    aspect-ratio: 3 / 4;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    background: $surface-2;
+    flex-shrink: 0;
+  
+    &:focus-visible { @include focus-ring; border-radius: $radius-lg; }
+  }
+  
+  .item__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    @include transition(transform, $duration-slow, $ease-out-expo);
+  
+    .item__image_wrap:hover & { transform: scale(1.04); }
+  }
+  
+  .item__image_placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, $surface-2 0%, $surface-3 100%);
+  }
+  
+  // ── Details column ────────────────────────────────────────────
+  .item__details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: $space-3;
+    min-width: 0;
+  }
+  
+  .item__meta {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+  }
+  
+  .item__category {
+    font-family: $font-display;
+    font-size: 10px;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $ink-faint;
+  }
+  
+  .item__name {
+    font-family: $font-body;
+    font-size: $text-base;
+    font-weight: $weight-medium;
+    color: $ink;
+    text-decoration: none;
+    @include line-clamp(2);
+    @include transition(color, $duration-fast, $ease-standard);
+  
+    &:hover { color: $brand-400; }
+    &:focus-visible { @include focus-ring; border-radius: $radius-sm; }
+  }
+  
+  // ── Variant pills ─────────────────────────────────────────────
+  .item__variants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-2;
+    margin-top: $space-1;
+  }
+  
+  .variant_pill {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    height: 22px;
+    padding: 0 $space-2;
+    background: $surface-3;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: $radius-sm;
+    font-size: $text-xs;
+  
+    &--muted {
+      opacity: 0.55;
+    }
+  }
+  
+  .variant_pill__swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    flex-shrink: 0;
+  }
+  
+  .variant_pill__label {
+    color: $ink-faint;
+  }
+  
+  .variant_pill__value {
+    color: $ink-muted;
+    font-weight: $weight-medium;
+  }
+  
+  // ── Controls row ──────────────────────────────────────────────
+  .item__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-4;
+    flex-wrap: wrap;
+  }
+  
+  // ── Stepper ───────────────────────────────────────────────────
+  .stepper {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: $radius-md;
+    overflow: hidden;
+  
+    &--disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+  
+  .stepper__btn {
+    @include flex-center;
+    width: 36px;
+    height: 100%;
+    color: $ink-muted;
+    font-size: $text-base;
+    @include transition(color background, $duration-fast, $ease-standard);
+  
+    // The trash icon variant
+    svg { color: #ef4444; opacity: 0.7; }
+  
+    &:hover {
+      color: $ink;
+      background: rgba(255, 255, 255, 0.06);
+  
+      svg { opacity: 1; }
+    }
+  
+    &:focus-visible { @include focus-ring; }
+    &:disabled { cursor: not-allowed; }
+  }
+  
+  .stepper__value {
+    @include flex-center;
+    min-width: 40px;
+    height: 100%;
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-bold;
+    color: $ink;
+    border-inline: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  
+  // ── Pricing ───────────────────────────────────────────────────
+  .item__pricing {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  
+  .item__unit_price {
+    font-size: $text-xs;
+    color: $ink-faint;
+  }
+  
+  .item__subtotal {
+    font-family: $font-display;
+    font-size: $text-base;
+    font-weight: $weight-bold;
+    color: $ink;
+  }
+  
+  // ── Remove ────────────────────────────────────────────────────
+  .item__remove {
+    @include flex-center;
+    align-self: flex-start;
+    margin-top: 2px;
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-md;
+    color: $ink-faint;
+    @include transition(color background, $duration-fast, $ease-standard);
+  
+    &:hover {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.08);
+    }
+  
+    &:focus-visible { @include focus-ring; }
+    &:disabled { opacity: 0.35; cursor: not-allowed; }
+  }
