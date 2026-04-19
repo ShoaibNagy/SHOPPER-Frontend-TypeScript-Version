@@ -1,0 +1,252 @@
+// ─────────────────────────────────────────────────────────────
+// ProductFilters.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ── Sort ──────────────────────────────────────────────────────
+.sort_group {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+  }
+  
+  .sort_btn {
+    @include flex-between;
+    width: 100%;
+    padding: $space-2 $space-3;
+    font-family: $font-body;
+    font-size: $text-sm;
+    color: $ink-muted;
+    border-radius: $radius-md;
+    text-align: left;
+    @include transition(color background, $duration-fast, $ease-standard);
+  
+    &:hover { color: $ink; background: rgba(255, 255, 255, 0.04); }
+  
+    &--active {
+      color: $brand-400;
+      background: rgba($brand-500, 0.06);
+    }
+  
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  // ── Checkbox rows (category, availability) ────────────────────
+  .check_group {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+  
+  .check_row {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    cursor: pointer;
+    padding: $space-1 0;
+  
+    &:hover .check_label { color: $ink; }
+  }
+  
+  .check_input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  
+    &:checked + .check_box {
+      background: $brand-500;
+      border-color: $brand-500;
+  
+      &::after { opacity: 1; transform: scale(1); }
+    }
+  
+    &:focus-visible + .check_box {
+      @include focus-ring;
+    }
+  }
+  
+  .check_box {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    border-radius: $radius-sm;
+    border: 1.5px solid rgba(255, 255, 255, 0.18);
+    background: $surface-2;
+    flex-shrink: 0;
+    @include transition(background border-color, $duration-fast, $ease-standard);
+  
+    &::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 2px;
+      width: 8px;
+      height: 5px;
+      border-left: 1.5px solid #fff;
+      border-bottom: 1.5px solid #fff;
+      transform: rotate(-45deg) scale(0);
+      opacity: 0;
+      @include transition(opacity transform, $duration-fast, $ease-out-back);
+    }
+  }
+  
+  .check_label {
+    font-size: $text-sm;
+    color: $ink-muted;
+    @include transition(color, $duration-fast, $ease-standard);
+    user-select: none;
+  }
+  
+  .clear_btn {
+    margin-top: $space-1;
+    font-family: $font-display;
+    font-size: 10px;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $brand-400;
+    align-self: flex-start;
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    @include transition(color background, $duration-fast, $ease-standard);
+  
+    &:hover { color: $brand-300; background: rgba($brand-500, 0.06); }
+  }
+  
+  // ── Price range ───────────────────────────────────────────────
+  .price_group {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  }
+  
+  .price_row {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+  
+  .price_label {
+    font-family: $font-display;
+    font-size: 10px;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $ink-faint;
+  }
+  
+  .price_sep {
+    color: $ink-faint;
+    flex-shrink: 0;
+    margin-top: 22px; // align with inputs
+  }
+  
+  .price_input_wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .price_currency {
+    position: absolute;
+    left: $space-3;
+    font-size: $text-xs;
+    color: $ink-faint;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .price_input {
+    width: 100%;
+    height: 40px;
+    padding-left: $space-6;
+    padding-right: $space-3;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: $radius-md;
+    font-family: $font-body;
+    font-size: $text-sm;
+    color: $ink;
+    outline: none;
+    @include transition(border-color box-shadow, $duration-fast, $ease-standard);
+    // Hide number spinner arrows
+    appearance: textfield;
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button { appearance: none; }
+  
+    &:focus {
+      border-color: $brand-500;
+      box-shadow: 0 0 0 3px rgba($brand-500, 0.12);
+    }
+  
+    &::placeholder { color: $ink-faint; }
+  }
+  
+  // ── Size buttons ──────────────────────────────────────────────
+  .size_group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-2;
+  }
+  
+  .size_btn {
+    height: 36px;
+    min-width: 44px;
+    padding: 0 $space-3;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: $radius-md;
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.04em;
+    color: $ink-muted;
+    @include transition(color background border-color, $duration-fast, $ease-standard);
+  
+    &:hover {
+      color: $ink;
+      border-color: rgba(255, 255, 255, 0.16);
+      background: $surface-3;
+    }
+  
+    &--active {
+      color: $brand-400;
+      background: rgba($brand-500, 0.1);
+      border-color: rgba($brand-500, 0.4);
+    }
+  
+    &:focus-visible { @include focus-ring; }
+  }
+  
+  // ── Color swatches ────────────────────────────────────────────
+  .color_group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-3;
+  }
+  
+  .color_btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-hex);
+    border: 2px solid transparent;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    @include transition(outline-color transform, $duration-fast, $ease-out-back);
+    cursor: pointer;
+  
+    &:hover { transform: scale(1.2); }
+  
+    &--active {
+      outline-color: $brand-500;
+      transform: scale(1.15);
+    }
+  
+    &:focus-visible { @include focus-ring; border-radius: 50%; }
+  }
