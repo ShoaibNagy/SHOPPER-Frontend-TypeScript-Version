@@ -1,0 +1,207 @@
+// ─────────────────────────────────────────────────────────────
+// ProductImageGallery.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ── Gallery wrapper ───────────────────────────────────────────
+.gallery {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+  
+    @include respond-to('lg') {
+      // On product detail page, sit in a sticky column
+      position: sticky;
+      top: calc(#{$navbar-height} + #{$space-6});
+    }
+  }
+  
+  // ── Main image ────────────────────────────────────────────────
+  .main {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: $radius-2xl;
+    overflow: hidden;
+    background: $surface-2;
+    cursor: zoom-in;
+    user-select: none;
+    outline: none;
+  
+    &:focus-visible {
+      @include focus-ring;
+      border-radius: $radius-2xl;
+    }
+  
+    &:hover .arrow       { opacity: 1; }
+    &:hover .main__zoom_hint { opacity: 1; }
+  
+    &--zoomed {
+      cursor: zoom-out;
+      overflow: hidden;
+    }
+  }
+  
+  .main__skeleton {
+    @include absolute-fill;
+    border-radius: $radius-2xl;
+  }
+  
+  .main__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    @include transition(opacity transform, $duration-slow, $ease-out-expo);
+    transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+    will-change: transform, opacity;
+  
+    &--loaded { opacity: 1; }
+  
+    &--zoomed {
+      transform: scale(2.2);
+      // Disable the transition while panning for instant cursor tracking
+      transition-property: opacity;
+    }
+  }
+  
+  // ── Zoom hint badge ───────────────────────────────────────────
+  .main__zoom_hint {
+    position: absolute;
+    bottom: $space-3;
+    right: $space-3;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    padding: $space-1 $space-2;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    border-radius: $radius-full;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+    opacity: 0;
+    @include transition(opacity, $duration-base, $ease-standard);
+    pointer-events: none;
+  
+    &--active { opacity: 1; }
+  }
+  
+  // ── Prev / Next arrows ────────────────────────────────────────
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: $ink;
+    opacity: 0;
+    @include transition(opacity background transform, $duration-fast, $ease-standard);
+  
+    &--prev { left: $space-3; }
+    &--next { right: $space-3; }
+  
+    &:hover {
+      background: rgba(10, 10, 10, 0.9);
+      &.arrow--prev { transform: translateY(-50%) translateX(-2px); }
+      &.arrow--next { transform: translateY(-50%) translateX(2px); }
+    }
+  
+    &:focus-visible {
+      @include focus-ring;
+      opacity: 1;
+      border-radius: 50%;
+    }
+  }
+  
+  // ── Dot indicators (mobile) ───────────────────────────────────
+  .dots {
+    position: absolute;
+    bottom: $space-4;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    display: flex;
+    gap: 5px;
+  
+    @include respond-to('lg') { display: none; }
+  }
+  
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    @include transition(background transform, $duration-fast, $ease-out-back);
+  
+    &--active {
+      background: #fff;
+      transform: scale(1.3);
+    }
+  
+    &:focus-visible { @include focus-ring; border-radius: 50%; }
+  }
+  
+  // ── Thumbnail strip ───────────────────────────────────────────
+  .thumbs {
+    display: none;
+    gap: $space-2;
+    overflow-x: auto;
+    @include scrollbar-hidden;
+    padding-bottom: 2px; // prevent border cutoff on active thumb
+  
+    @include respond-to('sm') {
+      display: flex;
+    }
+  }
+  
+  .thumb {
+    flex-shrink: 0;
+    width: 72px;
+    height: 88px;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    background: $surface-2;
+    border: 2px solid transparent;
+    @include transition(border-color opacity, $duration-fast, $ease-standard);
+    outline: none;
+    cursor: pointer;
+  
+    &:hover   { border-color: rgba(255, 255, 255, 0.2); }
+    &--active { border-color: $brand-500; }
+    &:not(.thumb--active) { opacity: 0.6; }
+  
+    &:focus-visible {
+      @include focus-ring;
+      border-radius: $radius-lg;
+    }
+  }
+  
+  .thumb__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    @include transition(transform, $duration-slow, $ease-out-expo);
+  
+    .thumb:hover & { transform: scale(1.06); }
+  }
+  
+  // ── No-images placeholder ─────────────────────────────────────
+  .placeholder {
+    aspect-ratio: 4 / 5;
+    border-radius: $radius-2xl;
+    background: $surface-2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $surface-4;
+  }
