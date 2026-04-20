@@ -1,0 +1,89 @@
+// NotFound.module.scss
+
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.page {
+    min-height: 100dvh;
+    @include flex-center;
+    position: relative;
+    overflow: hidden;
+    background: $surface;
+  }
+  
+  .container {
+    @include container;
+    @include flex-col;
+    align-items: center;
+    gap: $space-5;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    padding-top: $space-20;
+    padding-bottom: $space-20;
+  }
+  
+  .code {
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-black;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: $brand-500;
+  }
+  
+  .heading {
+    font-family: $font-display;
+    font-size: clamp($text-4xl, 6vw, $text-6xl);
+    font-weight: $weight-black;
+    letter-spacing: -0.04em;
+    color: $ink;
+    line-height: $leading-tight;
+  }
+  
+  .sub {
+    font-size: $text-base;
+    color: $ink-muted;
+    max-width: 40ch;
+    line-height: $leading-relaxed;
+  }
+  
+  .actions { display: flex; gap: $space-3; margin-top: $space-4; }
+  
+  .btn_primary {
+    display: inline-flex; align-items: center;
+    height: 48px; padding: 0 $space-8;
+    background: $brand-500; color: #fff;
+    font-family: $font-display; font-size: $text-xs; font-weight: $weight-semibold;
+    letter-spacing: 0.06em; text-transform: uppercase; border-radius: $radius-md;
+    @include transition(background, $duration-base, $ease-standard);
+    &:hover { background: $brand-400; }
+  }
+  
+  .btn_ghost {
+    display: inline-flex; align-items: center;
+    height: 48px; padding: 0 $space-6;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: $ink-muted; font-family: $font-display; font-size: $text-xs;
+    font-weight: $weight-semibold; letter-spacing: 0.06em; text-transform: uppercase;
+    border-radius: $radius-md;
+    @include transition(color border-color, $duration-fast, $ease-standard);
+    &:hover { color: $ink; border-color: rgba(255,255,255,0.2); }
+  }
+  
+  // Giant 404 in background
+  .bg_num {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: $font-display;
+    font-size: clamp(200px, 35vw, 400px);
+    font-weight: $weight-black;
+    color: rgba(255,255,255,0.02);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
