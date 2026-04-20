@@ -47,7 +47,7 @@ import axios, {
   
   // ── Create base instance ──────────────────────────────────────
   const client: AxiosInstance = axios.create({
-    baseURL: process.env.VITE_API_BASE_URL ?? '/api/v1',
+    baseURL: import.meta.env.VITE_API_BASE_URL ?? '/api/v1',
     timeout: 15_000,
     headers: {
       'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ import axios, {
         try {
           const { data } = await axios.post<{
             data: { accessToken: string; refreshToken: string };
-          }>(`${process.env.VITE_API_BASE_URL ?? '/api/v1'}/auth/refresh-token`, {
+          }>(`${import.meta.env.VITE_API_BASE_URL ?? '/api/v1'}/auth/refresh-token`, {
             refreshToken,
           });
   
