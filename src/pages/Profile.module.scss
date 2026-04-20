@@ -1,0 +1,134 @@
+// Profile.module.scss
+
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.page { padding: $space-10 0 $space-20; min-height: 70dvh; }
+.container { @include container; max-width: 700px; }
+.loading { min-height: 60dvh; @include flex-center; }
+
+.title {
+  font-family: $font-display;
+  font-size: $text-3xl;
+  font-weight: $weight-bold;
+  letter-spacing: -0.03em;
+  color: $ink;
+  margin-bottom: $space-8;
+}
+
+.avatar_wrap {
+  display: flex;
+  align-items: center;
+  gap: $space-5;
+  padding: $space-6;
+  background: $surface-1;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: $radius-2xl;
+  margin-bottom: $space-8;
+}
+
+.avatar_label {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+  &:focus-within { @include focus-ring; border-radius: 50%; }
+}
+
+.avatar_img, .avatar_initials {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.avatar_img { object-fit: cover; }
+
+.avatar_initials {
+  @include flex-center;
+  background: $surface-3;
+  font-family: $font-display;
+  font-size: $text-xl;
+  font-weight: $weight-bold;
+  color: $ink-muted;
+}
+
+.avatar_loading, .avatar_overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  @include flex-center;
+}
+
+.avatar_loading { background: rgba(0,0,0,0.5); }
+
+.avatar_overlay {
+  background: rgba(0,0,0,0);
+  color: transparent;
+  @include transition(background color, $duration-fast, $ease-standard);
+  .avatar_label:hover & { background: rgba(0,0,0,0.5); color: #fff; }
+}
+
+.avatar_input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.avatar_name { font-family: $font-display; font-size: $text-base; font-weight: $weight-bold; color: $ink; }
+.avatar_email { font-size: $text-sm; color: $ink-faint; margin-top: 3px; }
+
+.tabs {
+  display: flex;
+  gap: $space-1;
+  margin-bottom: $space-8;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding-bottom: 0;
+}
+
+.tab {
+  height: 40px;
+  padding: 0 $space-4;
+  font-family: $font-display;
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $ink-faint;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  @include transition(color border-color, $duration-fast, $ease-standard);
+
+  &:hover { color: $ink-muted; }
+  &--active { color: $brand-400; border-bottom-color: $brand-500; }
+  &:focus-visible { @include focus-ring; }
+}
+
+.form { display: flex; flex-direction: column; gap: $space-6; }
+
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  border: none;
+  padding: 0;
+  min-width: 0;
+}
+
+.fieldset__legend {
+  font-family: $font-display;
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $ink-muted;
+  padding: 0;
+  margin-bottom: $space-1;
+  padding-left: $space-3;
+  border-left: 2px solid $brand-500;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-4;
+  @include respond-to('sm') { grid-template-columns: 1fr 1fr; }
+}
