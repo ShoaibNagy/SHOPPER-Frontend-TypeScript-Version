@@ -1,0 +1,198 @@
+// Checkout.module.scss
+
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.page { padding: $space-10 0 $space-20; min-height: 80dvh; }
+.container { @include container; }
+.loading, .empty { min-height: 60dvh; @include flex-center; flex-direction: column; gap: $space-4; }
+
+.steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: $space-10;
+  max-width: 300px;
+}
+
+.steps__line {
+  flex: 1;
+  height: 2px;
+  background: $surface-4;
+  position: relative;
+  &::after { content: ''; position: absolute; inset: 0; background: $brand-500; transform: scaleX(0); transform-origin: left; @include transition(transform, $duration-slow, $ease-out-expo); }
+  &--done::after { transform: scaleX(1); }
+}
+
+.step_dot {
+  @include flex-center;
+  flex-direction: column;
+  gap: $space-1;
+  cursor: default;
+  background: none;
+  &:not(:disabled) { cursor: pointer; }
+}
+
+.step_dot__n {
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: $surface-3;
+  border: 2px solid $surface-4;
+  font-family: $font-display;
+  font-size: $text-xs;
+  font-weight: $weight-bold;
+  color: $ink-faint;
+  @include transition(background border-color color, $duration-base, $ease-standard);
+
+  .step_dot--active & { background: $brand-500; border-color: $brand-400; color: #fff; }
+  .step_dot--done   & { background: rgba($brand-500,0.15); border-color: rgba($brand-500,0.4); color: $brand-400; }
+}
+
+.step_dot__label {
+  font-family: $font-display;
+  font-size: 10px;
+  font-weight: $weight-semibold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $ink-faint;
+  .step_dot--active & { color: $ink-muted; }
+  .step_dot--done & { color: $brand-400; }
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-10;
+  @include respond-to('lg') { grid-template-columns: 1fr 400px; align-items: flex-start; }
+}
+
+.form_col { display: flex; flex-direction: column; gap: $space-8; }
+.summary_col { min-width: 0; }
+
+.step_title {
+  font-family: $font-display;
+  font-size: $text-2xl;
+  font-weight: $weight-bold;
+  letter-spacing: -0.02em;
+  color: $ink;
+  margin-bottom: $space-6;
+}
+
+.next_btn, .place_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  margin-top: $space-6;
+  height: 52px;
+  padding: 0 $space-8;
+  background: $brand-500;
+  color: #fff;
+  font-family: $font-display;
+  font-size: $text-sm;
+  font-weight: $weight-semibold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: $radius-md;
+  @include transition(background, $duration-base, $ease-standard);
+  &:hover { background: $brand-400; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:focus-visible { @include focus-ring; }
+}
+
+.place_btn { width: 100%; }
+
+.shipping_review {
+  padding: $space-5;
+  background: $surface-2;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: $radius-xl;
+  margin-bottom: $space-6;
+}
+
+.shipping_review__header { @include flex-between; margin-bottom: $space-2; }
+
+.shipping_review__title {
+  font-family: $font-display;
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $ink-muted;
+}
+
+.shipping_review__edit {
+  font-family: $font-display;
+  font-size: 10px;
+  font-weight: $weight-semibold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $brand-400;
+  &:hover { color: $brand-300; }
+}
+
+.shipping_review__addr {
+  font-size: $text-sm;
+  color: $ink-muted;
+  line-height: $leading-relaxed;
+}
+
+.payment_select { margin-bottom: $space-6; }
+
+.payment_select__title {
+  font-family: $font-display;
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $ink-muted;
+  margin-bottom: $space-3;
+}
+
+.method_options { display: flex; flex-direction: column; gap: $space-3; }
+
+.method_opt {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-4;
+  background: $surface-2;
+  border: 1.5px solid rgba(255,255,255,0.07);
+  border-radius: $radius-xl;
+  cursor: pointer;
+  @include transition(border-color background, $duration-fast, $ease-standard);
+
+  &:hover { border-color: rgba(255,255,255,0.14); background: $surface-3; }
+  &--active { border-color: $brand-500; background: rgba($brand-500,0.05); }
+}
+
+.method_radio { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.method_dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  flex-shrink: 0;
+  position: relative;
+  @include transition(border-color, $duration-fast, $ease-standard);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $brand-500;
+    transform: translate(-50%,-50%) scale(0);
+    @include transition(transform, $duration-base, $ease-out-back);
+  }
+
+  .method_opt--active & { border-color: $brand-500; &::after { transform: translate(-50%,-50%) scale(1); } }
+}
+
+.method_label { font-size: $text-sm; color: $ink; }
