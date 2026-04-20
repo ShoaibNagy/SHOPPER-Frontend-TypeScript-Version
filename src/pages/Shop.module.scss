@@ -1,0 +1,67 @@
+// Shop.module.scss
+
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.page { min-height: 100dvh; }
+
+.page__header {
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: $surface-1;
+  padding: $space-6 0;
+}
+
+.page__header__inner {
+  @include container;
+  @include flex-between;
+  gap: $space-4;
+  flex-wrap: wrap;
+}
+
+.page__title {
+  font-family: $font-display;
+  font-size: $text-2xl;
+  font-weight: $weight-bold;
+  letter-spacing: -0.02em;
+  color: $ink;
+}
+
+.page__subtitle {
+  font-size: $text-sm;
+  color: $ink-faint;
+  margin-top: $space-1;
+}
+
+.filter_trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  height: 40px;
+  padding: 0 $space-4;
+  border-radius: $radius-md;
+  border: 1px solid rgba(255,255,255,0.08);
+  font-family: $font-display;
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $ink-muted;
+  @include transition(color background, $duration-fast, $ease-standard);
+
+  &:hover { color: $ink; background: $surface-2; }
+  @include respond-to('lg') { display: none; }
+}
+
+.layout {
+  @include container;
+  display: flex;
+  align-items: flex-start;
+  gap: $space-8;
+  padding-top: $space-8;
+  padding-bottom: $space-16;
+}
+
+.grid_col {
+  flex: 1;
+  min-width: 0;
+}
