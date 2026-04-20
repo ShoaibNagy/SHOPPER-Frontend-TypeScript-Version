@@ -7,10 +7,6 @@ import toast from 'react-hot-toast';
 import * as reviewsApi from '@api/reviews.api';
 import { queryKeys } from '@utils/queryKeys';
 import type { CreateReviewPayload, ReviewFilters, UpdateReviewPayload } from '@types';
-import * as reviewsApi from '@api/reviews.api';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from '@utils/queryKeys';
-import toast from 'react-hot-toast';
 
 // ── Reviews for a product ─────────────────────────────────────
 export function useProductReviews(productId: string, filters: ReviewFilters = {}) {
