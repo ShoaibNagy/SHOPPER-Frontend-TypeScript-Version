@@ -1,0 +1,672 @@
+// ─────────────────────────────────────────────────────────────
+// Home.module.scss
+// ─────────────────────────────────────────────────────────────
+
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+// ── Shared utilities ──────────────────────────────────────────
+.container {
+    @include container;
+  }
+  
+  .loading_center {
+    min-height: 300px;
+    @include flex-center;
+  }
+  
+  // ─────────────────────────────────────────────────────────────
+  // HERO
+  // ─────────────────────────────────────────────────────────────
+  .hero {
+    position: relative;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: calc(#{$navbar-height} + #{$space-12}) 0 $space-20;
+  }
+  
+  // Dot-grid background pattern
+  .hero__grid {
+    @include absolute-fill;
+    background-image:
+      radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+  
+  // Brand-orange radial glow behind the headline
+  .hero__glow {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba($brand-500, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+    will-change: transform;
+  }
+  
+  .hero__inner {
+    @include container;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+    max-width: 900px;
+  }
+  
+  .hero__eyebrow {
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: $brand-400;
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  
+    &::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: $brand-500;
+    }
+  }
+  
+  .hero__headline {
+    font-family: $font-display;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: $weight-black;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    color: $ink;
+    overflow: hidden;
+  }
+  
+  // Individual word wrapper — GSAP targets translateY overflow
+  .hero__word {
+    display: inline-block;
+    margin-right: 0.25em;
+    overflow: hidden;
+    vertical-align: bottom;
+  
+    &--accent {
+      color: $brand-400;
+      // Subtle text gradient for the accent word
+      background: linear-gradient(135deg, $brand-400 0%, $brand-600 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+  
+  .hero__sub {
+    font-size: clamp($text-base, 2vw, $text-xl);
+    color: $ink-muted;
+    line-height: $leading-relaxed;
+    max-width: 44ch;
+  }
+  
+  .hero__cta {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    flex-wrap: wrap;
+  }
+  
+  .cta_primary {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-3;
+    height: 56px;
+    padding: 0 $space-8;
+    background: $brand-500;
+    color: #fff;
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: $radius-sm;
+    box-shadow: 0 0 0 0 rgba($brand-500, 0);
+    @include transition(background box-shadow, $duration-base, $ease-out-expo);
+  
+    &:hover {
+      background: $brand-400;
+      box-shadow: 0 0 40px -8px rgba($brand-500, 0.6);
+    }
+  }
+  
+  .cta_secondary {
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $ink-muted;
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    @include transition(color border-color, $duration-fast, $ease-standard);
+  
+    &:hover { color: $ink; border-color: $ink; }
+  }
+  
+  // Scroll indicator (vertical line + label)
+  .hero__scroll {
+    position: absolute;
+    bottom: $space-8;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-2;
+    animation: fade-in 1s 1.5s both;
+  }
+  
+  .hero__scroll__line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.3));
+    animation: scroll-line 2s ease-in-out infinite;
+  }
+  
+  @keyframes scroll-line {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50%       { opacity: 1;   transform: scaleY(0.6); }
+  }
+  
+  .hero__scroll__label {
+    font-family: $font-display;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: $ink-faint;
+    writing-mode: vertical-rl;
+  }
+  
+  // Floating stat cards (bottom-right of hero)
+  .hero__stats {
+    position: absolute;
+    bottom: $space-12;
+    right: $space-8;
+    display: none;
+    flex-direction: column;
+    gap: $space-3;
+  
+    @include respond-to('xl') { display: flex; }
+  }
+  
+  .stat_card {
+    padding: $space-4 $space-5;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: $radius-xl;
+    backdrop-filter: blur(12px);
+    animation: fade-up 0.6s $ease-out-back both;
+    text-align: right;
+  
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+  }
+  
+  .stat_card__value {
+    display: block;
+    font-family: $font-display;
+    font-size: $text-2xl;
+    font-weight: $weight-black;
+    color: $ink;
+    letter-spacing: -0.02em;
+  }
+  
+  .stat_card__label {
+    font-family: $font-display;
+    font-size: 10px;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $ink-faint;
+  }
+  
+  // ─────────────────────────────────────────────────────────────
+  // MARQUEE TICKER
+  // ─────────────────────────────────────────────────────────────
+  .marquee {
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: $surface-1;
+    padding: $space-3 0;
+  }
+  
+  .marquee__inner {
+    display: flex;
+    width: 200%;
+    will-change: transform;
+  }
+  
+  .marquee__track {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 50%;
+  }
+  
+  .marquee__item {
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $ink-faint;
+    padding: 0 $space-6;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: $space-5;
+  }
+  
+  .marquee__dot {
+    color: $brand-500;
+    font-size: 10px;
+  }
+  
+  // ─────────────────────────────────────────────────────────────
+  // SHARED SECTION STYLES
+  // ─────────────────────────────────────────────────────────────
+  .section {
+    padding: $space-20 0;
+  
+    &--dark {
+      background: $surface-1;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+  }
+  
+  .section__header {
+    @include flex-between;
+    align-items: flex-end;
+    gap: $space-4;
+    margin-bottom: $space-10;
+    flex-wrap: wrap;
+  }
+  
+  .section__title {
+    font-family: $font-display;
+    font-size: clamp($text-2xl, 3vw, $text-4xl);
+    font-weight: $weight-bold;
+    color: $ink;
+    letter-spacing: -0.03em;
+    line-height: $leading-tight;
+  }
+  
+  .section__subtitle {
+    font-size: $text-sm;
+    color: $ink-faint;
+    margin-top: $space-1;
+  }
+  
+  .section__link {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $brand-400;
+    white-space: nowrap;
+    @include transition(color, $duration-fast, $ease-standard);
+  
+    &:hover { color: $brand-300; }
+    &:focus-visible { @include focus-ring; border-radius: $radius-sm; }
+  }
+  
+  // ─────────────────────────────────────────────────────────────
+  // CATEGORIES GRID
+  // ─────────────────────────────────────────────────────────────
+  .categories_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $space-3;
+  
+    @include respond-to('md') { grid-template-columns: repeat(3, 1fr); }
+    @include respond-to('lg') { grid-template-columns: repeat(6, 1fr); }
+  }
+  
+  .category_card {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: $radius-xl;
+    overflow: hidden;
+    background: $surface-2;
+    display: block;
+    text-decoration: none;
+    @include transition(transform box-shadow, $duration-slow, $ease-out-expo);
+  
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  
+      .category_card__img { transform: scale(1.06); }
+    }
+  
+    &:focus-visible { @include focus-ring; border-radius: $radius-xl; }
+  }
+  
+  .category_card__img {
+    @include absolute-fill;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    @include transition(transform, $duration-slow, $ease-out-expo);
+  }
+  
+  .category_card__overlay {
+    @include absolute-fill;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+  }
+  
+  .category_card__name {
+    position: absolute;
+    bottom: $space-4;
+    left: $space-4;
+    right: $space-4;
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-bold;
+    letter-spacing: 0.04em;
+    color: #fff;
+    text-transform: uppercase;
+  }
+  
+  // ─────────────────────────────────────────────────────────────
+  // PRODUCTS GRID
+  // ─────────────────────────────────────────────────────────────
+  .products_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $space-4;
+  
+    @include respond-to('md') { grid-template-columns: repeat(3, 1fr); }
+    @include respond-to('xl') { grid-template-columns: repeat(4, 1fr); }
+  
+    &--4 {
+      @include respond-to('lg') { grid-template-columns: repeat(4, 1fr); }
+    }
+  }
+  
+  // ─────────────────────────────────────────────────────────────
+  // EDITORIAL BANNER
+  // ─────────────────────────────────────────────────────────────
+  .banner_section {
+    padding: $space-20 0;
+  }
+  
+  .editorial_banner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-10;
+    padding: $space-12 $space-10;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: $radius-3xl;
+    overflow: hidden;
+    position: relative;
+  
+    @include respond-to('lg') {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+  
+  .editorial_banner__content {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .editorial_banner__tag {
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: $brand-400;
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  
+    &::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: $brand-500;
+    }
+  }
+  
+  .editorial_banner__headline {
+    font-family: $font-display;
+    font-size: clamp($text-3xl, 4vw, $text-5xl);
+    font-weight: $weight-black;
+    color: $ink;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  
+    em {
+      font-style: italic;
+      font-weight: $weight-regular;
+      color: $brand-400;
+      font-family: Georgia, serif;
+    }
+  }
+  
+  .editorial_banner__body {
+    font-size: $text-base;
+    color: $ink-muted;
+    line-height: $leading-relaxed;
+    max-width: 46ch;
+  }
+  
+  .editorial_banner__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    font-family: $font-display;
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $brand-400;
+    @include transition(color gap, $duration-fast, $ease-standard);
+    width: fit-content;
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba($brand-400, 0.4);
+  
+    &:hover { color: $brand-300; border-color: rgba($brand-300, 0.6); }
+  }
+  
+  // Geometric art decoration
+  .editorial_banner__art {
+    position: relative;
+    display: none;
+    height: 300px;
+  
+    @include respond-to('lg') { display: block; }
+  }
+  
+  .art_circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 1px solid rgba($brand-500, 0.2);
+    animation: spin-slow 20s linear infinite;
+  }
+  
+  .art_line_h {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  
+  .art_line_v {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  
+  .art_dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $brand-500;
+    box-shadow: 0 0 20px 4px rgba($brand-500, 0.4);
+  }
+  
+  // ─────────────────────────────────────────────────────────────
+  // USP ROW
+  // ─────────────────────────────────────────────────────────────
+  .usp_section {
+    padding: $space-16 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: $surface-1;
+  }
+  
+  .usp_grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-6;
+  
+    @include respond-to('lg') { grid-template-columns: repeat(4, 1fr); }
+  }
+  
+  .usp_item {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-4;
+  }
+  
+  .usp_item__icon {
+    @include flex-center;
+    width: 44px;
+    height: 44px;
+    border-radius: $radius-lg;
+    background: rgba($brand-500, 0.08);
+    border: 1px solid rgba($brand-500, 0.15);
+    color: $brand-400;
+    flex-shrink: 0;
+  }
+  
+  .usp_item__title {
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-bold;
+    color: $ink;
+    letter-spacing: 0.01em;
+    margin-bottom: $space-1;
+  }
+  
+  .usp_item__body {
+    font-size: $text-xs;
+    color: $ink-faint;
+    line-height: $leading-relaxed;
+  }
+  
+  // ─────────────────────────────────────────────────────────────
+  // BOTTOM CTA BAND
+  // ─────────────────────────────────────────────────────────────
+  .cta_band {
+    padding: $space-20 0;
+  }
+  
+  .cta_band__inner {
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: $space-8;
+    padding: $space-10 $space-10;
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: $radius-3xl;
+    position: relative;
+    overflow: hidden;
+  
+    // Subtle glow bottom-right
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -40px;
+      right: -40px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba($brand-500, 0.15), transparent 70%);
+      pointer-events: none;
+    }
+  }
+  
+  .cta_band__headline {
+    font-family: $font-display;
+    font-size: clamp($text-2xl, 3vw, $text-4xl);
+    font-weight: $weight-bold;
+    color: $ink;
+    letter-spacing: -0.03em;
+    max-width: 28ch;
+  }
+  
+  .cta_band__sub {
+    font-size: $text-sm;
+    color: $ink-muted;
+    margin-top: $space-2;
+  }
+  
+  .cta_band__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-3;
+    height: 56px;
+    padding: 0 $space-8;
+    background: $brand-500;
+    color: #fff;
+    font-family: $font-display;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: $radius-sm;
+    white-space: nowrap;
+    @include transition(background box-shadow, $duration-base, $ease-out-expo);
+    position: relative;
+    z-index: 1;
+  
+    &:hover {
+      background: $brand-400;
+      box-shadow: 0 0 40px -8px rgba($brand-500, 0.6);
+    }
+  }
