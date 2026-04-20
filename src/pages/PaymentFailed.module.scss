@@ -1,0 +1,75 @@
+// PaymentFailed.module.scss
+
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.page { min-height: calc(100dvh - #{$navbar-height}); @include flex-center; padding: $space-16 $space-4; }
+.container { display: flex; flex-direction: column; align-items: center; gap: $space-6; max-width: 480px; text-align: center; }
+
+.icon_wrap {
+  width: 96px;
+  height: 96px;
+  @include flex-center;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  animation: fade-in $duration-base $ease-out-expo both;
+}
+
+.heading {
+  font-family: $font-display;
+  font-size: clamp($text-3xl, 4vw, $text-4xl);
+  font-weight: $weight-bold;
+  letter-spacing: -0.03em;
+  color: $ink;
+}
+
+.sub {
+  font-size: $text-base;
+  color: $ink-muted;
+  line-height: $leading-relaxed;
+  max-width: 44ch;
+}
+
+.actions { display: flex; gap: $space-3; flex-wrap: wrap; justify-content: center; margin-top: $space-2; }
+
+.btn_primary {
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 $space-8;
+  background: $brand-500;
+  color: #fff;
+  font-family: $font-display;
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: $radius-md;
+  @include transition(background, $duration-base, $ease-standard);
+  &:hover { background: $brand-400; }
+}
+
+.btn_secondary {
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 $space-6;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: $ink-muted;
+  font-family: $font-display;
+  font-size: $text-xs;
+  font-weight: $weight-semibold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: $radius-md;
+  @include transition(color border-color, $duration-fast, $ease-standard);
+  &:hover { color: $ink; border-color: rgba(255,255,255,0.18); }
+}
+
+.help { padding: $space-5; background: $surface-2; border: 1px solid rgba(255,255,255,0.05); border-radius: $radius-xl; margin-top: $space-4; }
+
+.help__text { font-size: $text-sm; color: $ink-faint; line-height: $leading-relaxed; }
+
+.help__link { color: $brand-400; @include transition(color, $duration-fast, $ease-standard); &:hover { color: $brand-300; } }
