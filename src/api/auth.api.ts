@@ -18,9 +18,9 @@ import type {
 
 const BASE = '/auth';
 
-// ── POST /auth/register ───────────────────────────────────────
+// ── POST /auth/signup ───────────────────────────────────────
 export async function register(payload: RegisterPayload): Promise<AuthResponse> {
-  const { data } = await client.post<ApiResponse<AuthResponse>>(`${BASE}/register`, payload);
+  const { data } = await client.post<ApiResponse<AuthResponse>>(`${BASE}/signup`, payload);
   return data.data;
 }
 
@@ -35,10 +35,10 @@ export async function logout(refreshToken: string): Promise<void> {
   await client.post(`${BASE}/logout`, { refreshToken });
 }
 
-// ── POST /auth/refresh-token ──────────────────────────────────
+// ── POST /auth/refresh ──────────────────────────────────
 // Called automatically by the client interceptor — rarely needed directly.
 export async function refreshToken(token: string): Promise<AuthTokens> {
-  const { data } = await client.post<ApiResponse<AuthTokens>>(`${BASE}/refresh-token`, {
+  const { data } = await client.post<ApiResponse<AuthTokens>>(`${BASE}/refresh`, {
     refreshToken: token,
   });
   return data.data;
