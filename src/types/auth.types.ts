@@ -1,25 +1,23 @@
-// ─────────────────────────────────────────────────────────────
 // auth.types.ts
-// ─────────────────────────────────────────────────────────────
 
 import type { MongoId, Timestamps } from './api.types';
 
-// ── User Role ─────────────────────────────────────────────────
 export type UserRole = 'user' | 'admin';
 
-// ── User model (as returned by the API) ──────────────────────
+// Backend returns 'username'; keep both so UI can use whichever is available.
 export interface User extends Timestamps {
   _id: MongoId;
   name: string;
+  username?: string;   // backend field name — present on all users
   email: string;
   role: UserRole;
-  avatar?: string;      // URL to uploaded profile picture (multer)
+  avatar?: string;
   phone?: string;
-  address?: UserAddress;
-  isEmailVerified: boolean;
+  address?: UserAddress;   // restored — used by ShippingForm and Profile pages
   isActive: boolean;
 }
 
+// UserAddress is imported by order.types.ts, ShippingForm, and Profile
 export interface UserAddress {
   street: string;
   city: string;
@@ -28,22 +26,22 @@ export interface UserAddress {
   country: string;
 }
 
-// ── JWT token pair ────────────────────────────────────────────
+// Dual-token pair — matches backend auth.service.ts issueTokenPair()
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
 }
 
-// ── Auth response (user + tokens together) ───────────────────
+// Auth response wrapper from POST /auth/login and /auth/register
 export interface AuthResponse {
   user: User;
   tokens: AuthTokens;
 }
 
-// ── Request payloads ─────────────────────────────────────────
+// ── Request payloads ──────────────────────────────────────────
 
 export interface RegisterPayload {
-  name: string;
+  name: string;       // mapped to 'username' when sent to backend
   email: string;
   password: string;
   phone?: string;
