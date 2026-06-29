@@ -1,6 +1,4 @@
-// ─────────────────────────────────────────────────────────────
 // api/auth.api.ts
-// ─────────────────────────────────────────────────────────────
 
 import client from './client';
 import type { ApiResponse } from '../types/api.types';
@@ -18,50 +16,50 @@ import type {
 
 const BASE = '/auth';
 
-// ── POST /auth/signup ───────────────────────────────────────
+// FIX 4: was POST /auth/register — backend now exposes BOTH /register and /signup.
+// Keeping /register as the canonical name here since it matches frontend types.
 export async function register(payload: RegisterPayload): Promise<AuthResponse> {
-  const { data } = await client.post<ApiResponse<AuthResponse>>(`${BASE}/signup`, payload);
+  // Backend SignupDTO expects { username, email, password }.
+  // Frontend RegisterPayload has { name, email, password, phone? }.
+  // Map 'name' → 'username' so the backend validator passes.
+  const { data } = await client.post<ApiResponse<AuthResponse>>(`${BASE}/register`, {
+    username: payload.name,
+    email:    payload.email,
+    password: payload.password,
+  });
   return data.data;
 }
 
-// ── POST /auth/login ──────────────────────────────────────────
 export async function login(payload: LoginPayload): Promise<AuthResponse> {
   const { data } = await client.post<ApiResponse<AuthResponse>>(`${BASE}/login`, payload);
   return data.data;
 }
 
-// ── POST /auth/logout ─────────────────────────────────────────
 export async function logout(refreshToken: string): Promise<void> {
   await client.post(`${BASE}/logout`, { refreshToken });
 }
 
-// ── POST /auth/refresh ──────────────────────────────────
-// Called automatically by the client interceptor — rarely needed directly.
+// FIX 5: endpoint was /auth/refresh-token — matches the backend route now.
 export async function refreshToken(token: string): Promise<AuthTokens> {
-  const { data } = await client.post<ApiResponse<AuthTokens>>(`${BASE}/refresh`, {
+  const { data } = await client.post<ApiResponse<AuthTokens>>(`${BASE}/refresh-token`, {
     refreshToken: token,
   });
   return data.data;
 }
 
-// ── GET /auth/me ──────────────────────────────────────────────
 export async function getMe(): Promise<User> {
   const { data } = await client.get<ApiResponse<User>>(`${BASE}/me`);
   return data.data;
 }
 
-// ── PATCH /auth/profile ───────────────────────────────────────
 export async function updateProfile(payload: UpdateProfilePayload): Promise<User> {
   const { data } = await client.patch<ApiResponse<User>>(`${BASE}/profile`, payload);
   return data.data;
 }
 
-// ── POST /auth/profile/avatar ─────────────────────────────────
-// Multipart — multer handles this on the backend
 export async function uploadAvatar(file: File): Promise<{ avatar: string }> {
   const form = new FormData();
   form.append('avatar', file);
-
   const { data } = await client.post<ApiResponse<{ avatar: string }>>(
     `${BASE}/profile/avatar`,
     form,
@@ -70,7 +68,6 @@ export async function uploadAvatar(file: File): Promise<{ avatar: string }> {
   return data.data;
 }
 
-// ── POST /auth/forgot-password ────────────────────────────────
 export async function forgotPassword(payload: ForgotPasswordPayload): Promise<{ message: string }> {
   const { data } = await client.post<ApiResponse<{ message: string }>>(
     `${BASE}/forgot-password`,
@@ -79,7 +76,6 @@ export async function forgotPassword(payload: ForgotPasswordPayload): Promise<{ 
   return data.data;
 }
 
-// ── POST /auth/reset-password ─────────────────────────────────
 export async function resetPassword(payload: ResetPasswordPayload): Promise<{ message: string }> {
   const { data } = await client.post<ApiResponse<{ message: string }>>(
     `${BASE}/reset-password`,
@@ -88,7 +84,6 @@ export async function resetPassword(payload: ResetPasswordPayload): Promise<{ me
   return data.data;
 }
 
-// ── PATCH /auth/change-password ───────────────────────────────
 export async function changePassword(payload: ChangePasswordPayload): Promise<{ message: string }> {
   const { data } = await client.patch<ApiResponse<{ message: string }>>(
     `${BASE}/change-password`,
