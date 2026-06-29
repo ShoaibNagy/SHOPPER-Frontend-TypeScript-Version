@@ -30,10 +30,18 @@ export function useOrder(orderId: string) {
 }
 
 // ── Single order by order number ─────────────────────────────
+// NOTE: Backend has no dedicated /orders/number/:orderNumber endpoint.
+// We look up by id; callers that only have an orderNumber should
+// fetch the order list and find the matching entry client-side.
 export function useOrderByNumber(orderNumber: string) {
   return useQuery({
     queryKey: queryKeys.orders.byNumber(orderNumber),
-    queryFn: () => ordersApi.getOrderByNumber(orderNumber),
+    // Fallback: search the user's order list for the matching orderNumber.
+    // Returns undefined when not found so the caller can show a loading state.
+    queryFn: async () => {
+      const result = await ordersApi.getOrders({});
+      return result.items.find((o) => o.orderNumber === orderNumber) ?? null;
+    },
     enabled: Boolean(orderNumber),
     staleTime: 60 * 1000,
   });
@@ -47,15 +55,11 @@ export function useCreateOrder() {
   return useMutation({
     mutationFn: (payload: CreateOrderPayload) => ordersApi.createOrder(payload),
     onSuccess: (order) => {
-      // Pre-populate the cache so the success page loads instantly
       queryClient.setQueryData(queryKeys.orders.detail(order._id), order);
-      // Invalidate the list so order history reflects the new order
       void queryClient.invalidateQueries({ queryKey: queryKeys.orders.lists() });
-      // Clear the cart cache — it's now empty
       void queryClient.invalidateQueries({ queryKey: queryKeys.cart.all });
 
       if (order.paymentMethod === 'stripe') {
-        // Navigate to payment with orderId to create the PaymentIntent
         void navigate(`/checkout/payment?orderId=${order._id}`);
       } else {
         void navigate(`/payment/success?orderId=${order._id}`);
@@ -70,8 +74,10 @@ export function useCancelOrder() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ orderId, payload }: { orderId: string; payload: CancelOrderPayload }) =>
-      ordersApi.cancelOrder(orderId, payload),
+    // CancelOrderPayload still accepted in the call signature for forward-compat
+    // but not sent to the backend (which doesn't require a body for cancellation).
+    mutationFn: ({ orderId }: { orderId: string; payload?: CancelOrderPayload }) =>
+      ordersApi.cancelOrder(orderId),
     onSuccess: (updatedOrder) => {
       queryClient.setQueryData(queryKeys.orders.detail(updatedOrder._id), updatedOrder);
       void queryClient.invalidateQueries({ queryKey: queryKeys.orders.lists() });
