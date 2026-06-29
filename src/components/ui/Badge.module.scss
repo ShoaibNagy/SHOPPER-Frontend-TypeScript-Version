@@ -4,6 +4,7 @@
 
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
+@use "sass:list";
 
 // ── Base ──────────────────────────────────────────────────────
 .badge {
@@ -43,9 +44,9 @@
   );
   
   @each $name, $values in $badge-colors {
-    $color:  nth($values, 1);
-    $bg:     nth($values, 2);
-    $border: nth($values, 3);
+    $color:  list.nth($values, 1);
+    $bg:     list.nth($values, 2);
+    $border: list.nth($values, 3);
   
     .badge--#{$name} {
       background: $bg;
@@ -74,7 +75,7 @@
     animation: dot-pulse 2s ease-in-out infinite;
   
     @each $name, $values in $badge-colors {
-      &--#{$name} { background: nth($values, 1); }
+      &--#{$name} { background: list.nth($values, 1); }
     }
   
     &--neutral { background: $ink-faint; animation: none; }
