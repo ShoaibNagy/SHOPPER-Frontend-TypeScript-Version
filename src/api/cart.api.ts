@@ -25,18 +25,23 @@ export async function addToCart(payload: AddToCartPayload): Promise<Cart> {
   return data.data;
 }
 
-// ── PATCH /cart/items/:itemId ─────────────────────────────────
+// ── PATCH /cart/items (body: { productId, quantity }) ────────
 export async function updateCartItem(
-  itemId: string,
+  productId: string,
   payload: UpdateCartItemPayload,
 ): Promise<Cart> {
-  const { data } = await client.patch<ApiResponse<Cart>>(`${BASE}/items/${itemId}`, payload);
+  const { data } = await client.patch<ApiResponse<Cart>>(`${BASE}/items`, {
+    productId,
+    ...payload,
+  });
   return data.data;
 }
 
-// ── DELETE /cart/items/:itemId ────────────────────────────────
-export async function removeCartItem(itemId: string): Promise<Cart> {
-  const { data } = await client.delete<ApiResponse<Cart>>(`${BASE}/items/${itemId}`);
+// ── DELETE /cart/items (body: { productId }) ──────────────────
+export async function removeCartItem(productId: string): Promise<Cart> {
+  const { data } = await client.delete<ApiResponse<Cart>>(`${BASE}/items`, {
+    data: { productId },
+  });
   return data.data;
 }
 
