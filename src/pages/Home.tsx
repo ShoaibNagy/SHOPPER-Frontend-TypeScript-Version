@@ -15,21 +15,21 @@ import styles from './Home.module.scss';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  const rootRef     = useRef<HTMLDivElement>(null);
-  const subRef      = useRef<HTMLParagraphElement>(null);
-  const ctaRef      = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const subRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
-  const { data: featured,    isLoading: featLoading } = useFeaturedProducts(8);
-  const { data: newArrivals, isLoading: newLoading  } = useNewArrivals(4);
-  const { data: categories                           } = useCategories();
+  const { data: featured, isLoading: featLoading } = useFeaturedProducts(8);
+  const { data: newArrivals, isLoading: newLoading } = useNewArrivals(4);
+  const { data: categories } = useCategories();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Hero word stagger
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
       tl.from('.js-hero-word', { y: 100, opacity: 0, duration: 1.1, stagger: 0.08 })
-        .from(subRef.current,  { y: 24,  opacity: 0, duration: 0.7 }, '-=0.5')
-        .from(ctaRef.current,  { y: 20,  opacity: 0, duration: 0.6 }, '-=0.4');
+        .from(subRef.current, { y: 24, opacity: 0, duration: 0.7 }, '-=0.5')
+        .from(ctaRef.current, { y: 20, opacity: 0, duration: 0.6 }, '-=0.4');
 
       // Marquee
       gsap.to('.js-marquee-inner', {
@@ -98,9 +98,9 @@ export default function Home() {
         </div>
 
         <div className={styles.hero__stats} aria-hidden="true">
-          <StatCard value="2,400+" label="Products"     delay="0.8s" />
-          <StatCard value="98%"    label="Satisfaction" delay="1.0s" />
-          <StatCard value="Free"   label="Returns"      delay="1.2s" />
+          <StatCard value="2,400+" label="Products" delay="0.8s" />
+          <StatCard value="98%" label="Satisfaction" delay="1.0s" />
+          <StatCard value="Free" label="Returns" delay="1.2s" />
         </div>
       </section>
 
@@ -111,10 +111,10 @@ export default function Home() {
             <span key={gi} className={styles.marquee__track}>
               {['New Collection', 'Free Returns', 'Independent Designers',
                 'Sustainable Fashion', 'Curated Weekly', 'Free Shipping $150+'].map((t) => (
-                <span key={t} className={styles.marquee__item}>
-                  {t} <span className={styles.marquee__dot}>✦</span>
-                </span>
-              ))}
+                  <span key={t} className={styles.marquee__item}>
+                    {t} <span className={styles.marquee__dot}>✦</span>
+                  </span>
+                ))}
             </span>
           ))}
         </div>
@@ -215,10 +215,10 @@ export default function Home() {
       <section className={`${styles.usp_section} js-reveal`}>
         <div className={styles.container}>
           <div className={styles.usp_grid}>
-            <UspItem icon={<ShippingIcon />} title="Free shipping"   body="On orders over $150. Express available." />
-            <UspItem icon={<ReturnIcon />}   title="Free returns"    body="30-day hassle-free returns on all items." />
-            <UspItem icon={<SecureIcon />}   title="Secure checkout" body="Stripe-powered. Your data stays yours." />
-            <UspItem icon={<SupportIcon />}  title="Expert support"  body="Real people. Mon–Fri, 9am–6pm." />
+            <UspItem icon={<ShippingIcon />} title="Free shipping" body="On orders over $150. Express available." />
+            <UspItem icon={<ReturnIcon />} title="Free returns" body="30-day hassle-free returns on all items." />
+            <UspItem icon={<SecureIcon />} title="Secure checkout" body="Stripe-powered. Your data stays yours." />
+            <UspItem icon={<SupportIcon />} title="Expert support" body="Real people. Mon–Fri, 9am–6pm." />
           </div>
         </div>
       </section>
@@ -260,8 +260,8 @@ function UspItem({ icon, title, body }: { icon: React.ReactNode; title: string; 
   );
 }
 
-function ArrowIcon()    { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>; }
-function ShippingIcon() { return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>; }
-function ReturnIcon()   { return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.65"/></svg>; }
-function SecureIcon()   { return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>; }
-function SupportIcon()  { return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>; }
+function ArrowIcon() { return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>; }
+function ShippingIcon() { return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13" /><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></svg>; }
+function ReturnIcon() { return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10" /><path d="M3.51 15a9 9 0 1 0 .49-3.65" /></svg>; }
+function SecureIcon() { return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>; }
+function SupportIcon() { return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>; }
