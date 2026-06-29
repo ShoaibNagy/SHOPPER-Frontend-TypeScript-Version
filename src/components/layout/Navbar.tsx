@@ -11,26 +11,26 @@ import { ROUTES } from '@/router/routes';
 import { cn } from '@utils/cn';
 import styles from './Navbar.module.scss';
 
-// ── Nav link definitions ──────────────────────────────────────
 const NAV_LINKS = [
-  { label: 'Shop',     to: ROUTES.SHOP },
-  { label: 'New In',   to: `${ROUTES.SHOP}?isNew=true` },
-  { label: 'Sale',     to: `${ROUTES.SHOP}?sale=true` },
+  { label: 'Shop',   to: ROUTES.SHOP },
+  { label: 'New In', to: `${ROUTES.SHOP}?isNew=true` },
+  { label: 'Sale',   to: `${ROUTES.SHOP}?sale=true` },
 ] as const;
 
 export default function Navbar() {
-  const [scrolled,     setScrolled]     = useState(false);
-  const [menuOpen,     setMenuOpen]     = useState(false);
-  const [searchOpen,   setSearchOpen]   = useState(false);
-  const [searchQuery,  setSearchQuery]  = useState('');
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const location       = useLocation();
+  const location = useLocation();
+  const prevPath = useRef(location.pathname);
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const user            = useAuthStore((s) => s.user);
-  const { openCart, toggleCart }   = useCartStore();
-  const itemCount       = useCartStore((s) => s.optimisticCount);
+  const user = useAuthStore((s) => s.user);
+  const { openCart, toggleCart } = useCartStore();
+  const itemCount = useCartStore((s) => s.optimisticCount);
   const { mutate: logout } = useLogout();
 
   // ── Scroll state ─────────────────────────────────────────────
@@ -41,10 +41,13 @@ export default function Navbar() {
   }, []);
 
   // ── Close mobile menu on route change ────────────────────────
-  useEffect(() => {
+  // Adjust state during render (React-recommended pattern) so we avoid
+  // calling setState inside an effect body.
+  if (prevPath.current !== location.pathname) {
+    prevPath.current = location.pathname;
     setMenuOpen(false);
     setSearchOpen(false);
-  }, [location.pathname]);
+  }
 
   // ── Lock body scroll when mobile menu is open ─────────────────
   useEffect(() => {
@@ -69,8 +72,8 @@ export default function Navbar() {
       <header
         className={cn(
           styles.navbar,
-          scrolled   && styles['navbar--scrolled'],
-          menuOpen   && styles['navbar--menu-open'],
+          scrolled  && styles['navbar--scrolled'],
+          menuOpen  && styles['navbar--menu-open'],
         )}
         role="banner"
       >
@@ -119,18 +122,14 @@ export default function Navbar() {
                   aria-label="My account"
                 >
                   {user?.avatar ? (
-                    <img
-                      src={user.avatar}
-                      alt={user.name}
-                      className={styles.navbar__avatar}
-                    />
+                    <img src={user.avatar} alt={user.name} className={styles.navbar__avatar} />
                   ) : (
                     <UserIcon />
                   )}
                 </Link>
                 <div className={styles.navbar__user__dropdown}>
-                  <Link to={ROUTES.PROFILE}      className={styles.dropdown__item}>Profile</Link>
-                  <Link to={ROUTES.ORDER_HISTORY} className={styles.dropdown__item}>Orders</Link>
+                  <Link to={ROUTES.PROFILE}       className={styles.dropdown__item}>Profile</Link>
+                  <Link to={ROUTES.ORDER_HISTORY}  className={styles.dropdown__item}>Orders</Link>
                   <button
                     className={cn(styles.dropdown__item, styles['dropdown__item--danger'])}
                     onClick={() => logout()}
@@ -187,9 +186,7 @@ export default function Navbar() {
               className={styles.navbar__search__input}
               tabIndex={searchOpen ? 0 : -1}
             />
-            <button type="submit" className={styles.navbar__search__submit}>
-              Search
-            </button>
+            <button type="submit" className={styles.navbar__search__submit}>Search</button>
             <button
               type="button"
               className={styles.navbar__search__close}
@@ -244,7 +241,6 @@ export default function Navbar() {
           )}
         </nav>
 
-        {/* Cart button at the bottom of the mobile menu */}
         <button
           className={styles.mobile_menu__cart}
           onClick={() => { setMenuOpen(false); openCart(); }}
@@ -255,7 +251,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Backdrop that closes the mobile menu */}
       {menuOpen && (
         <div
           className={styles.mobile_menu__backdrop}
@@ -267,7 +262,6 @@ export default function Navbar() {
   );
 }
 
-// ── Inline SVG icons ──────────────────────────────────────────
 function LogoMark() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
